@@ -204,7 +204,6 @@ function checkValue(check, result) {
 
 function checkChrony(linux) {
     if (!checkProperty(shell, linux.chronyInstalled)) {
-        print("you are in trouble, ntp or chrony are not installed.");
         return false;
     }
     else if (!checkProperty(shell, linux.chronyRunning)) {
