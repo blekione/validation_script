@@ -1,0 +1,204 @@
+{"linux" : {
+    "kernelVersion" :
+        ["kernel version is",
+         "this is example description",
+         "this is example solution",
+         "uname -r|cut -f1 -d.",
+         ">",
+         "3.0",
+         "amber"],
+    "perf" :
+        ["perf is installed",
+         "description",
+         "solution",
+         "perf --version 2>&1",
+         "contains",
+         "perf version",
+         "amber"],
+    "lsof" :
+        ["lsof is installed",
+         "description",
+         "solution",
+         "lsof -v 2>&1|head -1",
+         "contains",
+         "lsof version",
+         "amber"],
+    "sysstat" :
+        ["sysstat are installed",
+         "description",
+         "solution",
+         "sar -V|head -1",
+         "contains",
+         "sysstat version",
+         "amber"],
+    "ntpInstalled" :
+        ["ntp is installed",
+         "description",
+         "solution",
+         "ntpd --version",
+         "contains",
+         "ntpd",
+         "amber"],
+    "ntpRunning" :
+        ["ntp is running",
+         "description",
+         "solution",
+         "pgrep ntpd",
+         ">",
+         "0",
+         "amber"],
+    "chronyInstalled" :
+        ["chrony is installed",
+         "description",
+         "solution",
+         "chronyd -v",
+         "contains",
+         "chronyd (chrony) version",
+         "amber"],
+    "chronyRunning" :
+        ["chrony is running",
+         "description",
+         "solution",
+         "pgrep chronyd",
+         ">",
+         "0",
+         "amber"],
+    "ulimitC" :
+        ["unlimited core files",
+         "This setting constrains the number of core files created when a program terminates unexpectedly.\nThese files are useful to determine the cause of the program termination.",
+         "To permanently edit this setting, add bellow line as a root user to  /etc/security/limits.conf.\n*\tsoft\tcore\tunlimited"],
+    "auditDisabled" :
+        ["auditing of the Linux system processes is disabled",
+         "description",
+         "solution"],
+    "thpDisabled" :
+        ["transparent huge pages are disabled",
+         "description",
+         "solution"],
+    "openFilesSoftLimit" :
+        ["open files soft limit is > 999998",
+         "description",
+         "solution"],
+    "openFilesHardLimit" :
+        ["open files hard limit is > 99998",
+         "description",
+         "solution"],
+    "sysctl" : {
+         "fileDescriptors" :
+              ["max number of file descriptors is > 999998",
+               "description",
+               "solution",
+               "fs.file-max"],
+          "openFileDescriptorsPerProcess" :
+              ["max number of open file descriptors per process is > 999998",
+               "description",
+               "solution",
+               "fs.nr_open"],
+          "dirtyRatio" :
+              ["memory level (in %) at which system starts to write data to swap file",
+               "description",
+               "solution",
+               "vm.dirty_ratio"],
+         "swappiness" :
+              ["system is set to awoids using swap file for the runtime memory",
+               "description",
+               "solution",
+               "vm.swappiness -n"],
+         "netCoreRmemMax" :
+              ["max size of the network socket receive buffers is > 16777216",
+               "description",
+               "solution",
+               "net.core.rmem_max"],
+         "netCoreWmemMax" :
+              ["max size of the network socket send buffers is > 16777216",
+               "description",
+               "solution",
+               "net.core.wmem_max"],
+         "netCoreRmemDefault" :
+              ["the default size of the network socket receive buffers is > 16777216",
+               "description",
+               "solution",
+               "net.core.rmem_default"],
+         "netCoreWmemDefault" :
+              ["the default size of the network socket send buffers is > 16777216",
+               "description",
+               "solution",
+               "net.core.wmem_default"],
+         "netCoreOptmemMax" :
+              ["the max size of the network socket option memory buffers is > 167777216",
+               "description",
+               "solution",
+               "net.core.optmem_max"],
+         "netIpv4TcpRmem" :
+              ["min, default and max size of the TCP socket receive buffers are respectively equal to 4096, 16384 and 16777216",
+               "description",
+               "solution",
+               "net.ipv4.tcp_rmem"],
+         "netIpv4TcpWmem" :
+              ["min, default and max size of the TCP socket send buffers are respectivelly equals to 4096, 16384 and 16777216",
+               "description",
+               "solution",
+               "net.ipv4.tcp_wmem"],
+         "netIpv4TCPMaxTWBuckets" :
+              ["the maximum number of TCP sockets in TIME WAIT state is > 1999999",
+               "description",
+               "solution",
+               "net.ipv4.tcp_max_tw_buckets"],
+         "netIpv4TcpFinTimeout" :
+              ["the system waiting time (in seconds) for a FIN packet before the socket is forcibly closed is > 30",
+               "description",
+               "solution",
+               "net.ipv4.tcp_fin_timeout"],
+         "netIpv4TcpTWReuse" :
+              ["system is enabled to reuse sockets in TIME WAIT state when it is safe",
+               "description",
+               "solution",
+               "net.ipv4.tcp_tw_reuse"],
+        "netCoreNetdevMaxBacklog" :
+              ["size of the receive packets queue is > 9999",
+               "description",
+               "solution",
+               "net.core.netdev_max_backlog"],
+        "netIpv4TcpMaxSynBacklog" :
+              ["max number of queued connections request without ACK from the client is > 9999",
+               "description",
+               "solution",
+               "net.ipv4.tcp_max_syn_backlog"],
+        "netIpv4TcpSlowStartAfterIdle" :
+              ["resizing congestion window size after an idle to default value is disabled",
+               "description",
+               "solution",
+               "net.ipv4.tcp_slow_start_after_idle"],
+        "netIpv4TcpMem" : 
+              ["memory pressure settings are adequate to the number of open connections setting",
+               "description",
+               "solution",
+               "net.ipv4.tcp_mem"]
+         }
+    },
+"java" : {
+    "javaVersionMajor" :
+        ["minimal version of the Java is installed",
+         "description",
+         "solution"],
+    "javaVersionMinor" :
+        ["minimal update version of Java",
+         "description",
+         "solution"],
+    "jvmVendor" :
+        ["Oracle JVM is installed",
+         "description",
+         "solution"],
+    "jdkInstalled" : 
+        ["JDK is installed",
+         "description",
+         "solution"]
+    },
+"hardware" : {
+    "freeMemory" :
+        ["the size of the available memory is > 1Gb",
+         "description",
+         "solution"]
+    }
+}
+
