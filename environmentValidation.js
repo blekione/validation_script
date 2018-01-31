@@ -211,7 +211,7 @@ function checkChrony(linux) {
         return false;
     }
     else {
-        return false;
+        return true;
     }
 }
 
