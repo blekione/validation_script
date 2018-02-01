@@ -76,21 +76,24 @@ function checkLinux(linux){
 //    checkProperty(shell, linux.lsof);
 //    checkProperty(shell, linux.sysstat);
 
-    if(checkProperty(shell, linux.ntpInstalled)) {
+    if (checkProperty(shell, linux.ntpInstalled)) {
         if (checkProperty(shell, linux.ntpRunning)) {
             print("you are fine, take a beer and and enjoy.");
         }
         else {
-            if (checkChrony(linux)) {
-                print("you are fine, take a beer and enjoy.");
-            }
-            else {
-                print("you are in trouble, ntp installed but not running")
-            }
+            print("you are in trouble, ntp installed but not running")
         }
     }
-    else if (checkChrony(linux)) {
-        print("you are fine, take a beer and and enjoy.");
+    else if (checkProperty(shell, linux.chronyInstalled)) {
+        if (checkProperty(shell, linux.chronyRunning))
+            print("you are fine, take a beer and enjoy.");
+        }
+        else {
+            print("you are in trouble, chrony is installed but not running");
+        }
+    }
+    else {
+        print("you are in trouble. Ntp or chrony are not installed");
     }
 /*
     // Core ulimit needs to be set to "unlimited so that core files, used for debug purpose, are not truncated.
@@ -207,7 +210,7 @@ function checkChrony(linux) {
         return false;
     }
     else if (!checkProperty(shell, linux.chronyRunning)) {
-        print("you are in trouble, chrony is installed but not running");
+        
         return false;
     }
     else {
