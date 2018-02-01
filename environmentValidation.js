@@ -76,20 +76,15 @@ function checkLinux(linux){
 //    checkProperty(shell, linux.lsof);
 //    checkProperty(shell, linux.sysstat);
 
-    if (checkProperty(shell, linux.ntpInstalled)) {
-        if (checkProperty(shell, linux.ntpRunning)) {
+    if (checkProperty(shell, linux.ntpInstalled, false) || checkProperty(shell, linux.chronyInstalled, false)) {
+        if (checkProperty(shell, linux.ntpRunning, false)) {
             print("you are fine, take a beer and and enjoy.");
         }
-        else {
-            print("you are in trouble, ntp installed but not running")
-        }
-    }
-    else if (checkProperty(shell, linux.chronyInstalled)) {
-        if (checkProperty(shell, linux.chronyRunning))
+        else if (checkProperty(shell, linux.chronyRunning, false))
             print("you are fine, take a beer and enjoy.");
         }
         else {
-            print("you are in trouble, chrony is installed but not running");
+            print("you are in trouble, ntp/chrony installed but not running")
         }
     }
     else {
