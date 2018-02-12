@@ -1,7 +1,7 @@
 {"linux" : {
     "kernelVersion" :
         ["kernel version.",
-         "Diffusion is certified on Red Hat Enterprise Linux 7.2+ and as such a  kernel version should be greater than 3.0. Please upgrade your operating system to the version with a kernel greater than 3.0. More about system requirements can be found at https://docs.pushtechnology.com/docs/latest/manual/html/administratorguide/installation/system_requirements.html",
+         "Diffusion is certified on Red Hat Enterprise Linux 7.2+ and as such a kernel version should be greater than 3.0. Please upgrade your operating system to the version with a kernel greater than 3.0. More about system requirements can be found at https://docs.pushtechnology.com/docs/latest/manual/html/administratorguide/installation/system_requirements.html",
          "uname -r|cut -f1 -d.",
          ">",
          "3.0",
@@ -18,7 +18,7 @@
              "perf_installed"],
         "lsof" :
             ["lsof installation",
-             "lsof is a diagnostic tool which reports a list of all open files and the processes  that opened them. lsof can be installed by using your Linux distribution standard package manager (yum, apt).",
+             "lsof is a diagnostic tool which reports a list of all open files and the processes that opened them. lsof can be installed by using your Linux distribution standard package manager (yum, apt).",
              "lsof -v 2>&1|head -1",
              "contains",
              "lsof version",
@@ -34,7 +34,7 @@
              "sysstat_installed"],
         "ntpdInstalled" :
             ["ntpd installation.",
-             "ntpd is a system network time protocol deamons.It maintains a synchronisation of the system time with Internet standard time servers. ntpd/chrony can be installed by using your Linux distribution standard package manager (yum, apt).",
+             "ntpd is a system network time protocol daemons. It maintains a synchronisation of the system time with Internet standard time servers. ntpd/chrony can be installed by using your Linux distribution standard package manager (yum, apt).",
              "ntpd --version",
              "contains",
              "ntpd",
@@ -42,7 +42,7 @@
              "ntpd_Installed"],
         "ntpdRunning" :
             ["ntpd.",
-             "ntpd system time synchronisation deamon is installed, but it is not running. To start ntpd execute as a root user:\n\t /etc/init.d/ntp start",
+             "ntpd system time synchronisation daemon is installed, but it is not running. To start ntpd execute as a root user:\n\t /etc/init.d/ntp start",
              "pgrep ntpd",
              ">",
              0,
@@ -50,7 +50,7 @@
              "ntpd_running"],
         "chronydInstalled" :
             ["chronyd installation.",
-             "chronyd is a system network time protocol deamon. It maintains synchronisation of the system time with Internet standard time servers. It is advisable to install it. chronyd can be installed by using your Linux distribution standard package manager (yum, apt).",
+             "chronyd is a system network time protocol daemon. It maintains synchronisation of the system time with Internet standard time servers. It is advisable to install it. chronyd can be installed by using your Linux distribution standard package manager (yum, apt).",
              "chronyd -v",
              "contains",
              "chronyd (chrony) version",
@@ -84,7 +84,7 @@
              "transparent_hude_pages"],
         "swappiness" :
             ["using swap file for the runtime memory.",
-             "Dropping a memory cache to swap file have a high performance cost and should be avoided by minimizing swapping. Please consider setting vm.swappiness to 0 (disables swappines entirely for kernels > 3.5) or to 1 (minimal amount of swapping without disabling it entirely). To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tvm.swappiness=0",
+             "Dropping a memory cache to swap file have a high-performance cost and should be avoided by minimizing swapping. Please consider setting vm.swappiness to 0 (disables swappines entirely for kernels > 3.5) or to 1 (minimal amount of swapping without disabling it entirely). To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tvm.swappiness=0",
              "sysctl vm.swappiness -n",
              "===",
              0,
@@ -92,7 +92,7 @@
              "sysctl_vm.swappiness"],
         "dirtyRatio" :
             ["max memory level (in %) which can be filled before everything must be written to a disk.",
-             "When the system reaches dirty_ratio level all I/O operations are blocked until dirty pages have been written to the disk and might cause long I/O pauses. It is advisible to set this value to the high number to avoid blocking of I/O operations. To permanently change this setting add or change the following line in the /etc/sysctl.conf file:\n\tvm.dirty_ratio=90",
+             "When the system reaches dirty_ratio level all I/O operations are blocked until dirty pages have been written to the disk and might cause long I/O pauses. It is advisable to set this value to the high number to avoid blocking of I/O operations. To permanently change this setting add or change the following line in the /etc/sysctl.conf file:\n\tvm.dirty_ratio=90",
              "sysctl vm.dirty_ratio -n",
              ">",
              89,
@@ -102,7 +102,7 @@
     "file_system" : {
         "ulimitC" :
             ["unlimited core files.",
-             "Unlimited core files are created when a program terminates  unexpectedly. These files are useful to determine the cause of the program termination. To permanently edit this setting, add line:\n\t*\tsoft\tcore\tunlimited\n  as a root user to the /etc/security/limits.conf file. Executing 'man limits.conf' provides more details about this file.",
+             "Unlimited core files are created when a program terminates unexpectedly. These files are useful to determine the cause of the program termination. To permanently edit this setting, add line:\n\t*\tsoft\tcore\tunlimited\nas a root user to the /etc/security/limits.conf file. Executing 'man limits.conf' provides more details about this file.",
              "ulimit -c",
              "===",
              "unlimited",
@@ -110,7 +110,7 @@
              "ulimit_core_files"],
         "auditDisabled" :
             ["auditing of the Linux system processes.",
-             "Auditing of the Linux system process can cause small CPU overhead. It is advisible to disable this setting if audit deamon is not used for tracking system information. Auditing is set up at the system boot and can be disabled with following steps:\n\t1. As a root user append or change 'audit=0' kernel parameter of the GRUB_CMDLINE_LINUX option in the /etc/default/grub file (e.g GRUB_CMDLINE_LINUX=\"audit=0\").\n\t2. Rebuild grub.conf file with command: grub-mkconfig -o /boot/grub/grub.cfg .",
+             "Auditing of the Linux system process can cause small CPU overhead. It is advisable to disable this setting if audit daemon is not used for tracking system information. Auditing is set up at the system boot and can be disabled with following steps:\n\t1. As a root user append or change 'audit=0' kernel parameter of the GRUB_CMDLINE_LINUX option in the /etc/default/grub file (e.g. GRUB_CMDLINE_LINUX=\"audit=0\").\n\t2. Rebuild grub.conf file with command: grub-mkconfig -o /boot/grub/grub.cfg .",
              "cat /proc/cmdline|grep -F audit=0|wc -l",
              "===",
              1,
@@ -118,7 +118,7 @@
              "auditing_disabled"],
         "openFilesSoftLimit" :
             ["open files soft limit.",
-             "Open files limits defines how many files process can open for the specific user, and hence the number of open connections. Consider changing the limit if you need support a large number of client connections. To permanently change this setting add or change the line:\n\t*\tsoft\tnofile\t999998\n  as a root user in the /etc/security/limits.conf file. Executing 'man limits.conf' provides more details about this file.",
+             "Open files limits defines how many files process can open for the specific user, and hence the number of open connections. Consider changing the limit if you need support many client connections. To permanently change this setting add or change the line:\n\t*\tsoft\tnofile\t999998\nas a root user in the /etc/security/limits.conf file. Executing 'man limits.conf' provides more details about this file.",
              "prlimit -o RESOURCE,SOFT|grep NOFILE|awk '{print $NF}'",
              ">",
              999998,
@@ -126,7 +126,7 @@
              "user_open_files_soft_limit"],
         "openFilesHardLimit" :
             ["open files hard limit.",
-             "Open files limits defines how many files process can open for the specific user, and hence the number of open connections. Consider changing the limit if you need support a large number of client connections. To permanently change this setting add or change the line:\n\t*\thard\tnofile\t999998\n  as a root user in the /etc/security/limits.conf. Executing 'man limits.conf' provides more details about this file.",
+             "Open files limits defines how many files process can open for the specific user, and hence the number of open connections. Consider changing the limit if you need support many client connections. To permanently change this setting add or change the line:\n\t*\thard\tnofile\t999998\n  as a root user in the /etc/security/limits.conf. Executing 'man limits.conf' provides more details about this file.",
              "prlimit -o RESOURCE,HARD|grep NOFILE|awk '{print $NF}'",
              ">",
              999998,
@@ -142,7 +142,7 @@
              "user_open_files_hard_limit_set_to_default"],
         "fileDescriptors" :
             ["max number of file descriptors.",
-             "Max number of concurrent file descriptors defines how many files can be open on a kernel level, and hence the number of open connections. Consider changing the limit if you need support a large number of client connections. To permanently change this setting add or change the following line in the /etc/sysctl.conf file:\n\tfs.file-max=999998",
+             "Max number of concurrent file descriptors defines how many files can be open on a kernel level, and hence the number of open connections. Consider changing the limit if you need support many client connections. To permanently change this setting add or change the following line in the /etc/sysctl.conf file:\n\tfs.file-max=999998",
              "sysctl fs.file-max -n",
              ">",
              999998,
@@ -150,7 +150,7 @@
              "sysctl_fs.file-max"],
         "openFileDescriptorsPerProcess" :
             ["max number of open file descriptors per process.",
-             "fs.nr_open defines the max number of open files per process on the kernel level, and hence the number of open connections. Consider changing the limit if you need support a large number of client connections. To permanently change this setting add or change the following line in the /etc/sysctl.conf file:\n\tfs.nr_open=999998",
+             "fs.nr_open defines the max number of open files per process on the kernel level, and hence the number of open connections. Consider changing the limit if you need support many client connections. To permanently change this setting add or change the following line in the /etc/sysctl.conf file:\n\tfs.nr_open=999998",
              "sysctl fs.nr_open -n",
              ">",
              999998,
@@ -160,7 +160,7 @@
     "network" : {
         "netCoreRmemMax" :
             ["max size of the network socket receive buffer.",
-             "For the systems with hight data rates it is recommended to increase the global maximum socket receive buffer size. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tnet.core.rmem_max=16777216",
+             "For the systems with high data rates it is recommended to increase the global maximum socket receive buffer size. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tnet.core.rmem_max=16777216",
              "sysctl net.core.rmem_max -n",
              ">",
              16777215,
@@ -192,7 +192,7 @@
              "sysctl_net.core.wmem_default"],
         "netCoreOptmemMax" :
             ["the max size of the network socket option memory buffers.",
-             "For the systems with high data rates it is recommended to increase a maximum ancillary buffer size allowed per socket to the same value as a socket buffers maximum size. Ancillary data is used to receive the exta packet related services/information from the kernel to the user process. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\t net.core.optmem_max=16777216",
+             "For the systems with high data rates it is recommended to increase a maximum ancillary buffer size allowed per socket to the same value as a socket buffers maximum size. Ancillary data is used to receive the extra packet related services/information from the kernel to the user process. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\t net.core.optmem_max=16777216",
              "sysctl net.core.optmem_max -n",
              ">",
              16777215,
@@ -240,7 +240,7 @@
              "sysctl_net.ipv4.tcp_tw_reuse"],
        "netCoreNetdevMaxBacklog" :
             ["the size of the receive packets queue.",
-             "For the systems with high connections rates, where packets can arrive quicker than they are processed, it is recommended to increase  receive packets queue. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tnet.core.netdev_max_backlog=50000",
+             "For the systems with high connections rates, where packets can arrive quicker than they are processed, it is recommended to increase receive packets queue. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tnet.core.netdev_max_backlog=50000",
              "sysctl net.core.netdev_max_backlog -n",
              ">",
              49999,
@@ -265,7 +265,7 @@
     },
     "netIpv4TcpMem" : 
         ["memory pressure settings compare to the number of open connections settings.",
-         "Memory pressure settings for the memory allocated for TCP sockets should be adequate to the number of expected connections. To low value can put affect performance and in the wors scenario can lead to droping connections. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_mem=\"min default max\"\nwhere:\n\t min = expectedConnections * 0.4\n\t default = expectedConnections * 1.05\n\t max = expectedConnections * 1.6",
+         "Memory pressure settings for the memory allocated for TCP sockets should be adequate to the number of expected connections. To low value can put affect performance and in the worse scenario can lead to dropping connections. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_mem=\"min default max\"\nwhere:\n\t min = expectedConnections * 0.4\n\t default = expectedConnections * 1.05\n\t max = expectedConnections * 1.6",
          "sysctl net.ipv4.tcp_mem -n",
          "===",
          "999999",
