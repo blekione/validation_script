@@ -1,7 +1,7 @@
 {"linux" : {
     "kernelVersion" :
         ["kernel version.",
-         "Diffusion is certified on Red Hat Enterprise Linux 7.2+ and as such a kernel version should be greater than 3.0. Please upgrade your operating system to the version with a kernel greater than 3.0. More about system requirements can be found at https://docs.pushtechnology.com/docs/latest/manual/html/administratorguide/installation/system_requirements.html",
+         "Diffusion is certified on Red Hat Enterprise Linux 7.2+, so the kernel version should be greater than 3.0. Please upgrade your operating system to a version with a kernel greater than 3.0. More about system requirements can be found at https://docs.pushtechnology.com/docs/latest/manual/html/administratorguide/installation/system_requirements.html",
          "uname -r|cut -f1 -d.",
          ">",
          "3.0",
@@ -9,16 +9,16 @@
          "kernel_version"],
     "software" : {
         "perf" :
-            ["perf installation",
-             "perf is a Linux profiler tool which offers a rich set of commands to collect and analyse performance and trace data. perf can be installed by using your Linux distribution standard package manager (yum, apt).",
+            ["perf installation.",
+             "perf is a Linux profiler tool which offers a rich set of commands to collect and analyse performance and trace data. perf can be installed using your Linux distribution standard package manager (yum, apt).",
              "perf --version 2>&1",
              "contains",
              "perf version",
              "[AMBER]",
              "perf_installed"],
         "lsof" :
-            ["lsof installation",
-             "lsof is a diagnostic tool which reports a list of all open files and the processes that opened them. lsof can be installed by using your Linux distribution standard package manager (yum, apt).",
+            ["lsof installation.",
+             "lsof is a diagnostic tool which reports a list of all open files and the processes that opened them. lsof can be installed using your Linux distribution standard package manager (yum, apt).",
              "lsof -v 2>&1|head -1",
              "contains",
              "lsof version",
@@ -26,7 +26,7 @@
              "lsof_installed"],
         "sysstat" :
             ["sysstat installation.",
-             "sysstat is a set of diagnostic tools which offers advanced system performance monitoring. sysstat tools can be installed by using your Linux distribution standard package manager (yum, apt).",
+             "sysstat is a set of diagnostic tools which offers advanced system performance monitoring. sysstat tools can be installed using your Linux distribution standard package manager (yum, apt).",
              "sar -V|head -1",
              "contains",
              "sysstat version",
@@ -34,7 +34,7 @@
              "sysstat_installed"],
         "ntpdInstalled" :
             ["ntpd installation.",
-             "ntpd is a system network time protocol daemons. It maintains a synchronisation of the system time with Internet standard time servers. ntpd/chrony can be installed by using your Linux distribution standard package manager (yum, apt).",
+             "ntpd is a system network time protocol daemons. It synchronises the system time with Internet standard time servers. ntpd/chrony can be installed using your Linux distribution standard package manager (yum, apt).",
              "ntpd --version",
              "contains",
              "ntpd",
@@ -42,7 +42,7 @@
              "ntpd_Installed"],
         "ntpdRunning" :
             ["ntpd.",
-             "ntpd system time synchronisation daemon is installed, but it is not running. To start ntpd execute as a root user:\n\t /etc/init.d/ntp start",
+             "ntpd system time synchronisation daemon is installed, but it is not running. To start ntpd, execute as a root user:\n\t /etc/init.d/ntp start",
              "pgrep ntpd",
              ">",
              0,
@@ -50,7 +50,7 @@
              "ntpd_running"],
         "chronydInstalled" :
             ["chronyd installation.",
-             "chronyd is a system network time protocol daemon. It maintains synchronisation of the system time with Internet standard time servers. It is advisable to install it. chronyd can be installed by using your Linux distribution standard package manager (yum, apt).",
+             "chronyd is a system network time protocol daemon. It synchronises the system time with Internet standard time servers. We recommend you install it. chronyd can be installed using your Linux distribution standard package manager (yum, apt).",
              "chronyd -v",
              "contains",
              "chronyd (chrony) version",
@@ -58,7 +58,7 @@
              "chrony_installed"],
         "chronydRunning" :
             ["chronyd.",
-             "chronyd system time synchronisation deamon is installed, but it is not runnig. To start chronyd execute as a root user:\n\t/etc/init.d/chronyd start",
+             "chronyd system time synchronisation deamon is installed, but it is not running. To start chronyd, execute as a root user:\n\t/etc/init.d/chronyd start",
              "pgrep chronyd",
              ">",
              0,
@@ -68,7 +68,7 @@
     "memory" : {
         "freeMemory" :
             ["the size of the available physical memory.",
-             "The available physical memory should be greater than 1 Gb.",
+             "The available physical memory should be greater than 1 GB.",
              "free -g|awk '/Mem:/{print$2}'",
              ">",
              "1",
@@ -76,7 +76,7 @@
              "free_memory"],
         "thpDisabled" :
             ["transparent huge pages.",
-             "Transparent huge pages (THP) can cause long pauses with large JVM heaps (> 1 GB) and should be disabled. THP can be disabled with following steps:\n\t1. As a root user append or change `transparent_hugepage=never` kernel parameter to the GRUB_CMDLINE_LINUX option in the /etc/default/grub file (eg.GRUB_CMDLINE_LINUX=\"transparent_hugepage=never\")\n\t2. Rebuild grub.conf file with command: grub-mkconfig -o /boot/grub/grub.cfg .",
+             "Transparent huge pages (THP) can cause long pauses with large JVM heaps (> 1 GB) and should be disabled. THP can be disabled with the following steps:\n\t1. As a root user, append or change `transparent_hugepage=never` to the GRUB_CMDLINE_LINUX option in the /etc/default/grub file (eg.GRUB_CMDLINE_LINUX=\"transparent_hugepage=never\")\n\t2. Rebuild grub.conf file with: grub-mkconfig -o /boot/grub/grub.cfg .",
              "cat /sys/kernel/mm/transparent_hugepage/enabled | grep -F [never]| wc -l",
              ">",
              0,
@@ -84,15 +84,15 @@
              "transparent_hude_pages"],
         "swappiness" :
             ["using swap file for the runtime memory.",
-             "Dropping a memory cache to swap file have a high-performance cost and should be avoided by minimizing swapping. Please consider setting vm.swappiness to 0 (disables swappines entirely for kernels > 3.5) or to 1 (minimal amount of swapping without disabling it entirely). To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tvm.swappiness=0",
+             "Saving the memory cache to a swap file has a high performance cost, and should be avoided by minimizing swapping. Please consider setting vm.swappiness to 0 (disables swapping entirely for kernels > 3.5) or 1 (minimal amount of swapping without disabling it entirely). To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tvm.swappiness=0",
              "sysctl vm.swappiness -n",
              "===",
              0,
              "[AMBER]",
              "sysctl_vm.swappiness"],
         "dirtyRatio" :
-            ["max memory level (in %) which can be filled before everything must be written to a disk.",
-             "When the system reaches dirty_ratio level all I/O operations are blocked until dirty pages have been written to the disk and might cause long I/O pauses. It is advisable to set this value to the high number to avoid blocking of I/O operations. To permanently change this setting add or change the following line in the /etc/sysctl.conf file:\n\tvm.dirty_ratio=90",
+            ["max memory level (in %) which can be filled before everything must be written to disk.",
+             "When the system reaches dirty_ratio level, all I/O operations are blocked until dirty pages have been written to disk. This can cause long I/O pauses. It is advisable to use a high value, such as 90, to avoid blocking of I/O operations. To permanently change this setting, add or change the following line in the /etc/sysctl.conf file:\n\tvm.dirty_ratio=90",
              "sysctl vm.dirty_ratio -n",
              ">",
              89,
@@ -102,15 +102,15 @@
     "file_system" : {
         "ulimitC" :
             ["unlimited core files.",
-             "Unlimited core files are created when a program terminates unexpectedly. These files are useful to determine the cause of the program termination. To permanently edit this setting, add line:\n\t*\tsoft\tcore\tunlimited\nas a root user to the /etc/security/limits.conf file. Executing 'man limits.conf' provides more details about this file.",
+             "Unlimited core files are created when a program terminates unexpectedly. These files are useful to determine the cause of the termination. To permanently edit this setting, add the line:\n\t*\tsoft\tcore\tunlimited\nas a root user to the /etc/security/limits.conf file. Executing 'man limits.conf' provides more details about this file.",
              "ulimit -c",
              "===",
              "unlimited",
              "[AMBER]",
              "ulimit_core_files"],
         "auditDisabled" :
-            ["auditing of the Linux system processes.",
-             "Auditing of the Linux system process can cause small CPU overhead. It is advisable to disable this setting if audit daemon is not used for tracking system information. Auditing is set up at the system boot and can be disabled with following steps:\n\t1. As a root user append or change 'audit=0' kernel parameter of the GRUB_CMDLINE_LINUX option in the /etc/default/grub file (e.g. GRUB_CMDLINE_LINUX=\"audit=0\").\n\t2. Rebuild grub.conf file with command: grub-mkconfig -o /boot/grub/grub.cfg .",
+            ["auditing of Linux system processes.",
+             "Auditing of Linux system process can cause a small CPU overhead. It is advisable to disable this setting if the audit daemon is not used for tracking system information. Auditing is set up at system boot and can be disabled with the following steps:\n\t1. As a root user, append or change the 'audit=0' kernel parameter of the GRUB_CMDLINE_LINUX option in the /etc/default/grub file (e.g. GRUB_CMDLINE_LINUX=\"audit=0\").\n\t2. Rebuild grub.conf with: grub-mkconfig -o /boot/grub/grub.cfg .",
              "cat /proc/cmdline|grep -F audit=0|wc -l",
              "===",
              1,
@@ -118,7 +118,7 @@
              "auditing_disabled"],
         "openFilesSoftLimit" :
             ["open files soft limit.",
-             "Open files limits defines how many files process can open for the specific user, and hence the number of open connections. Consider changing the limit if you need support many client connections. To permanently change this setting add or change the line:\n\t*\tsoft\tnofile\t999998\nas a root user in the /etc/security/limits.conf file. Executing 'man limits.conf' provides more details about this file.",
+             "The open files limit defines how many files the Diffusion process can open for the specific user, and hence the number of open connections. Consider changing the limit if you need to support many client connections. To permanently change this setting add or change the line:\n\t*\tsoft\tnofile\t999998\nas a root user in the /etc/security/limits.conf file. Executing 'man limits.conf' provides more details about this file.",
              "prlimit -o RESOURCE,SOFT|grep NOFILE|awk '{print $NF}'",
              ">",
              999998,
@@ -126,7 +126,7 @@
              "user_open_files_soft_limit"],
         "openFilesHardLimit" :
             ["open files hard limit.",
-             "Open files limits defines how many files process can open for the specific user, and hence the number of open connections. Consider changing the limit if you need support many client connections. To permanently change this setting add or change the line:\n\t*\thard\tnofile\t999998\n  as a root user in the /etc/security/limits.conf. Executing 'man limits.conf' provides more details about this file.",
+             "The open files limits defines how many files the Diffusion process can open for the specific user, and hence the number of open connections. Consider changing the limit if you need to support many client connections. To permanently change this setting add or change the line:\n\t*\thard\tnofile\t999998\n as a root user in the /etc/security/limits.conf. Executing 'man limits.conf' provides more details about this file.",
              "prlimit -o RESOURCE,HARD|grep NOFILE|awk '{print $NF}'",
              ">",
              999998,
@@ -134,7 +134,7 @@
              "user_open_files_hard_limit"],
         "openFilesHardLimitSetToDefault" :
             ["open files hard limit is not set to default value.",
-             "When 'ulimit -nH' check returns 4096 it may indicate that the value of the 'hard nofile' limit for the user in the /etc/security/limits.conf file is set to be greater than the value of the 'fs.nr_open' limit in the /etc/sysctl.conf file. Please check both setting as in this case system will enforce default value (4096) of the 'hard nofile' limit and will impact the maximum number of open connections on this system.", 
+             "When 'ulimit -nH' check returns 4096, it may indicate that the value of the 'hard nofile' limit for the user in the /etc/security/limits.conf file is set to be greater than the value of the 'fs.nr_open' limit in the /etc/sysctl.conf file. Please check both settings, as in this case the system will enforce the default value (4096) of the 'hard nofile' limit, limiting the maximum number of open connections possible on this system.", 
              "prlimit -o RESOURCE,HARD|grep NOFILE|awk '{print $NF}'",
              "!=",
              4096,
@@ -142,7 +142,7 @@
              "user_open_files_hard_limit_set_to_default"],
         "fileDescriptors" :
             ["max number of file descriptors.",
-             "Max number of concurrent file descriptors defines how many files can be open on a kernel level, and hence the number of open connections. Consider changing the limit if you need support many client connections. To permanently change this setting add or change the following line in the /etc/sysctl.conf file:\n\tfs.file-max=999998",
+             "Max number of concurrent file descriptors defines how many files can be open on a kernel level, and hence the number of open connections. Consider changing the limit if you need to support many client connections. To permanently change this setting, add or change the following line in the /etc/sysctl.conf file:\n\tfs.file-max=999998",
              "sysctl fs.file-max -n",
              ">",
              999998,
@@ -150,7 +150,7 @@
              "sysctl_fs.file-max"],
         "openFileDescriptorsPerProcess" :
             ["max number of open file descriptors per process.",
-             "fs.nr_open defines the max number of open files per process on the kernel level, and hence the number of open connections. Consider changing the limit if you need support many client connections. To permanently change this setting add or change the following line in the /etc/sysctl.conf file:\n\tfs.nr_open=999998",
+             "fs.nr_open defines the max number of open files per process on the kernel level, and hence the number of open connections. Consider changing the limit if you need to support many client connections. To permanently change this setting, add or change the following line in the /etc/sysctl.conf file:\n\tfs.nr_open=999998",
              "sysctl fs.nr_open -n",
              ">",
              999998,
@@ -160,7 +160,7 @@
     "network" : {
         "netCoreRmemMax" :
             ["max size of the network socket receive buffer.",
-             "For the systems with high data rates it is recommended to increase the global maximum socket receive buffer size. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tnet.core.rmem_max=16777216",
+             "For systems with high data rates, it is recommended to increase the global maximum socket receive buffer size. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.core.rmem_max=16777216",
              "sysctl net.core.rmem_max -n",
              ">",
              16777215,
@@ -168,7 +168,7 @@
              "sysctl_net.core.rmem_max"],
         "netCoreWmemMax" :
             ["max size of the network socket send buffer is > 16777215",
-             "For the systems with high data rates it is recommended to increase the global maximum socket send buffer size. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tnet.core.wmem_max=16777216",
+             "For systems with high data rates, it is recommended to increase the global maximum socket send buffer size. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.core.wmem_max=16777216",
              "sysctl net.core.wmem_max -n",
              ">",
              16777215,
@@ -176,7 +176,7 @@
              "sysctl_net.core.wnem_max"],
         "netCoreRmemDefault" :
             ["the default size of the network socket receive buffers.",
-             "For the systems with high data rates it is recommended to increase the global default socket receive buffer size to the maximum value. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tnet.core.rmem_default=16777216",
+             "For systems with high data rates, it is recommended to increase the global default socket receive buffer size to the maximum value. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.core.rmem_default=16777216",
              "sysctl net.core.rmem_default -n",
              ">",
              16777215,
@@ -184,7 +184,7 @@
              "sysctl_net.core.rmem_default"],
         "netCoreWmemDefault" :
             ["the default size of the network socket send buffers.",
-             "For the systems with high data rates it is recommended to increase the global default socket send buffer size to the maximum value. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tnet.core.rmem_default=16777216",
+             "For systems with high data rates, it is recommended to increase the global default socket send buffer size to the maximum value. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.core.rmem_default=16777216",
              "sysctl net.core.wmem_default -n",
              ">",
              16777215,
@@ -192,7 +192,7 @@
              "sysctl_net.core.wmem_default"],
         "netCoreOptmemMax" :
             ["the max size of the network socket option memory buffers.",
-             "For the systems with high data rates it is recommended to increase a maximum ancillary buffer size allowed per socket to the same value as a socket buffers maximum size. Ancillary data is used to receive the extra packet related services/information from the kernel to the user process. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\t net.core.optmem_max=16777216",
+             "For systems with high data rates, it is recommended to increase maximum ancillary buffer size allowed per socket to the same value as socket buffer maximum size. Ancillary data is used to receive the extra packet related services/information from the kernel to the user process. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\t net.core.optmem_max=16777216",
              "sysctl net.core.optmem_max -n",
              ">",
              16777215,
@@ -200,7 +200,7 @@
              "sysctl_net.core.optmem_max"],
         "netIpv4TcpRmem" :
             ["the min, default, and max size of the TCP socket receive buffers.",
-             "For the systems with high data and connections rates it is recommended to increase TCP receive buffer values to min=4096, default=16384 and max=16777216. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\t net.ipv4.tcp_rmem=\"4096 16384 16777216\"",
+             "For systems with high data and connection rates, it is recommended to increase TCP receive buffer values to min=4096, default=16384 and max=16777216. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\t net.ipv4.tcp_rmem=\"4096 16384 16777216\"",
              "sysctl net.ipv4.tcp_rmem -n",
              "===",
              "4096 16384 16777216",
@@ -208,7 +208,7 @@
              "sysctl_net.ipv4.tcp_rmem"],
         "netIpv4TcpWmem" :
             ["the min, default, and max size of the TCP socket send buffers.",
-             "For the systems with high data and connections rates it is recommended to increase TCP send buffer values to min=4096, default=16384 and max=16777216. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\t net.ipv4.tcp_wmem=\"4096 16384 16777216\"",
+             "For systems with high data and connection rates, it is recommended to increase TCP send buffer values to min=4096, default=16384 and max=16777216. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\t net.ipv4.tcp_wmem=\"4096 16384 16777216\"",
              "sysctl net.ipv4.tcp_wmem -n",
              "===",
              "4096 16384 16777216",
@@ -216,7 +216,7 @@
              "sysctl_net.ipv4.tcp_wmem"],
         "netIpv4TCPMaxTWBuckets" :
             ["the maximum number of TCP sockets in TIME WAIT state.",
-             "To prevent simple DOS attacks it is recommended to increase the maximum number of sockets in TIME_WAIT state allowed in the system. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_max_tw_buckets=2000000",
+             "To prevent simple DOS attacks, it is recommended to increase the maximum allowed number of sockets in TIME_WAIT state. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_max_tw_buckets=2000000",
              "sysctl net.ipv4.tcp_max_tw_buckets -n",
              ">",
              1999999,
@@ -224,7 +224,7 @@
              "sysctl_net.ipv4.tcp_max_tw_buckets"],
         "netIpv4TcpFinTimeout" :
             ["the system waiting time (in seconds) for a FIN packet before the socket is forcibly closed.",
-             "For the systems with high connections rates it is recommended to decrease the time system is waiting for a FIN packet before the socket is forcibly closed. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_fin_timeout=30",
+             "For systems with high connection rates, it is recommended to decrease the time the system will wait for a FIN packet before the socket is forcibly closed. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_fin_timeout=30",
              "sysctl net.ipv4.tcp_fin_timeout -n",
              "===",
              31,
@@ -232,7 +232,7 @@
              "sysctl_net.ipv4.tcp_fin_timeout"],
         "netIpv4TcpTWReuse" :
             ["enabled reuse of sockets in TIME WAIT state when it is safe.",
-             "For the systems with high connections rates it is recommended to enable reuse of sockets in the TIME_WAIT state when it is safe for the system to do so. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_tw_reuse=1",
+             "For systems with high connection rates, it is recommended to enable reuse of sockets in the TIME_WAIT state when it is safe for the system to do so. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_tw_reuse=1",
              "sysctl net.ipv4.tcp_tw_reuse -n",
              "===",
              1,
@@ -240,15 +240,15 @@
              "sysctl_net.ipv4.tcp_tw_reuse"],
        "netCoreNetdevMaxBacklog" :
             ["the size of the receive packets queue.",
-             "For the systems with high connections rates, where packets can arrive quicker than they are processed, it is recommended to increase receive packets queue. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tnet.core.netdev_max_backlog=50000",
+             "For systems with high connection rates, where packets can arrive quicker than they are processed, it is recommended to increase the size of the receive packets queue. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.core.netdev_max_backlog=50000",
              "sysctl net.core.netdev_max_backlog -n",
              ">",
              49999,
              "[AMBER]",
              "sysctl_net.core.netdev_max_backlog"],
        "netIpv4TcpMaxSynBacklog" :
-            ["the max number of queued connections request without ACK from the client.",
-             "For the systems with high connections rates it is recommended to increase the queue for the connections without request ACK from the client. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_max_syn_backlog=10000",
+            ["the max number of queued connection requests without ACK from the client.",
+             "For systems with high connection rates, it is recommended to increase the size of the queue for connections without request ACK from the client. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_max_syn_backlog=10000",
              "sysctl net.ipv4.tcp_max_syn_backlog -n",
              ">",
              9999,
@@ -256,7 +256,7 @@
              "sysctl_net.ipv4.tcp_max_syn_backlog"],
        "netIpv4TcpSlowStartAfterIdle" :
             ["disabled resizing the congestion window after an idle to default value.",
-             "Resizing the congestion window after connections has been idle have negative impact on the connection performance and should be disabled. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_slow_start_after_idle=0",
+             "Resizing the congestion window after connections have been idle can have a negative impact on the connection performance and should be disabled. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_slow_start_after_idle=0",
              "sysctl net.ipv4.tcp_slow_start_after_idle -n",
              "===",
              0,
@@ -265,7 +265,7 @@
     },
     "netIpv4TcpMem" : 
         ["memory pressure settings compare to the number of open connections settings.",
-         "Memory pressure settings for the memory allocated for TCP sockets should be adequate to the number of expected connections. To low value can put affect performance and in the worse scenario can lead to dropping connections. To change this setting permanently add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_mem=\"min default max\"\nwhere:\n\t min = expectedConnections * 0.4\n\t default = expectedConnections * 1.05\n\t max = expectedConnections * 1.6",
+         "Memory pressure settings for the memory allocated for TCP sockets should be adequate for the number of expected connections. Setting this too low can affect performance, and may lead to dropped connections. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_mem=\"min default max\"\nwhere:\n\t min = expectedConnections * 0.4\n\t default = expectedConnections * 1.05\n\t max = expectedConnections * 1.6",
          "sysctl net.ipv4.tcp_mem -n",
          "===",
          "999999",
@@ -274,7 +274,7 @@
 },
 "javaCheck" : {
     "javaVersionMajor" :
-        ["the minimal version of Java.",
+        ["the minimum version of Java.",
          "Diffusion is certified on Oracle Hotspot, Java 1.8.0_u131 and later. Please check if the installed version of Java is supported by Diffusion. Diffusion requirements can be found at https://docs.pushtechnology.com/docs/latest/manual/html/administratorguide/installation/system_requirements.html",
          "",
          "===",
@@ -282,7 +282,7 @@
          "[RED]",
          "java_version_major"],
     "javaVersionMinor" :
-        ["the minimal update version of Java",
+        ["the minimum update version of Java",
          "description",
          "",
          ">",
