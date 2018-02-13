@@ -263,12 +263,15 @@ function checkValue(check, result, isResultPrintable) {
     else if (operator == "!=" && result != expectedValue) {
         checkPass = true;
     }
+    else if (operator == "==" && result == expectedValue) {
+        checkPass =true;
+    }
     else if (operator == "contains" && result.contains(expectedValue)) {
         checkPass = true;
         result = true;
     } 
     else if (operator != "===" && operator != ">" && operator != "<" &&
-            operator != "contains" && operator != "!=") {
+            operator != "contains" && operator != "!=" && operator != "==") {
         print("ERROR!: unknown operator [" + operator + "].");
         return;
     }
