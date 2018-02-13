@@ -58,7 +58,7 @@
              "chrony_installed"],
         "chronydRunning" :
             ["chronyd.",
-             "chronyd system time synchronisation deamon is installed, but it is not running. To start chronyd, execute as a root user:\n\t/etc/init.d/chronyd start",
+             "chronyd system time synchronisation deamon is installed, but it is not running. To start chronyd, execute as a root user:\n\t/etc/init.d/chrony start",
              "pgrep chronyd",
              ">",
              0,
@@ -71,7 +71,7 @@
              "The available physical memory should be greater than 1 GB.",
              "free -g|awk '/Mem:/{print$2}'",
              ">",
-             "1",
+             1,
              "[RED]",
              "free_memory"],
         "thpDisabled" :
