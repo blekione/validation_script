@@ -86,8 +86,8 @@
             ["using swap file for the runtime memory.",
              "Saving the memory cache to a swap file has a high performance cost, and should be avoided by minimizing swapping. Please consider setting vm.swappiness to 0 (disables swapping entirely for kernels > 3.5) or 1 (minimal amount of swapping without disabling it entirely). To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tvm.swappiness=0",
              "sysctl vm.swappiness -n",
-             "===",
-             0,
+             "<",
+             2,
              "[AMBER]",
              "sysctl_vm.swappiness"],
         "dirtyRatio" :
