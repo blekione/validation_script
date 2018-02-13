@@ -88,26 +88,28 @@ function checkLinux(linux) {
     var testMessage = "system time synchronisation is present.";
     if (checkProperty(shell, linux.software.ntpdInstalled, false)) {
         saveCheckInFile(linux.software.ntpdInstalled, "[GREEN]", true);
-        if (checkProperty(shell, linux.software.ntpdRunning, false)) {
+        var ntpdRunning = linux.software.ntpdRunning;
+        if (checkProperty(shell, ntpdRunning, false)) {
             printTestResult(testMessage, "[GREEN]");
-            saveCheckInFile(linux.software.ntpdRunning, "[GREEN]", true);
+            saveCheckInFile(ntpdRunning, "[GREEN]", true);
         }
         else {
-            printTestResult(linux.software.ntpdRunning[1], linux.software.ntpdRunning[5]);
-            saveCheckInFile(linux.software.ntpdRunning, linux.software.ntpdRunning[5], false);
-            failures.push(linux.ntpdRunning);
+            printTestResult(ntpdRunning[1], ntpdRunning[5]);
+            saveCheckInFile(ntpdRunning, ntpdRunning[5], false);
+            failures.push(ntpdRunning);
         }
     }
     else if (checkProperty(shell, linux.software.chronydInstalled, false)) {
         saveCheckInFile(linux.software.chronydInstalled, "[GREEN]", true);
-        if (checkProperty(shell, linux.software.chronydRunning, false)) {
+        var chronyRunning = linux.software.chronydRunning;
+        if (checkProperty(shell, chronydRunning, false)) {
             printTestResult(testMessage, "[GREEN]");
-            saveCheckInFile(linux.software.chronydRunning, "[GREEN]", true);
+            saveCheckInFile(chronydRunning, "[GREEN]", true);
         }
         else {
-            printTestResult(linux.software.chronydRunning[1], linux.software.chronydRunning[5]);
-            saveCheckInFile(linux.software.chronydRunning, linux.software.chronydRunning[5], false);
-            failures.push(linux.software.chronydRunning);
+            printTestResult(chronydRunning[1], chronydRunning[5]);
+            saveCheckInFile(chronydRunning, chronydRunning[5], false);
+            failures.push(chronydRunning);
         }
     }
     else {
