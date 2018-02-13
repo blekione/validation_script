@@ -112,7 +112,7 @@
             ["auditing of Linux system processes.",
              "Auditing of Linux system process can cause a small CPU overhead. It is advisable to disable this setting if the audit daemon is not used for tracking system information. Auditing is set up at system boot and can be disabled with the following steps:\n\t1. As a root user, append or change the 'audit=0' kernel parameter of the GRUB_CMDLINE_LINUX option in the /etc/default/grub file (e.g. GRUB_CMDLINE_LINUX=\"audit=0\").\n\t2. Rebuild grub.conf with: grub-mkconfig -o /boot/grub/grub.cfg .",
              "cat /proc/cmdline|grep -F audit=0|wc -l",
-             "===",
+             "<",
              1,
              "[AMBER]",
              "auditing_disabled"],
