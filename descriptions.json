@@ -251,15 +251,15 @@
         ["memory pressure settings compare to the number of open connections settings.",
          "Memory pressure settings for the memory allocated for TCP sockets should be adequate for the number of expected connections. Setting this too low can affect performance, and may lead to dropped connections. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_mem=\"min default max\"\nwhere:\n\t min = expectedConnections * 0.4\n\t default = expectedConnections * 1.05\n\t max = expectedConnections * 1.6",
          "sysctl net.ipv4.tcp_mem -n",
-         "===",
-         "999999",
+         "==",
+         999999",
          "[AMBER]",
          "sysctl_net.ipv4.tcp_mem"],
     "netIpv4TcpRmem" :
         ["the min, default, and max size of the TCP socket receive buffers.",
          "For systems with high data and connection rates, it is recommended to increase TCP receive buffer values to min=4096, default=16384 and max=16777216. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\t net.ipv4.tcp_rmem=\"4096 16384 16777216\"",
          "sysctl net.ipv4.tcp_rmem -n",
-         "===",
+         "==",
          "4096 16384 16777216",
          "[AMBER]",
          "sysctl_net.ipv4.tcp_rmem"],
@@ -267,10 +267,10 @@
         ["the min, default, and max size of the TCP socket send buffers.",
          "For systems with high data and connection rates, it is recommended to increase TCP send buffer values to min=4096, default=16384 and max=16777216. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\t net.ipv4.tcp_wmem=\"4096 16384 16777216\"",
          "sysctl net.ipv4.tcp_wmem -n",
-         "===",
+         "==",
          "4096 16384 16777216",
          "[AMBER]",
-         "sysctl_net.ipv4.tcp_wmem"]
+         "sysctl_net.ipv4.tcp_wmem"]4
 },
 "javaCheck" : {
     "javaVersionMajor" :
