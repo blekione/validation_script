@@ -320,9 +320,8 @@ function checkMultipleValuesSetting(shell, check, expectedValues) {
     var status = true
     var result = getCheckResult(shell, check);
     var results = result.split("\t");
-    
     for (var i = 0; i < results.length; i++) {
-        if (results[i] !== expectedValues[i]) {
+        if (results[i] != expectedValues[i]) {
             printTestResult(check[0] + " " + check[1],check[5]);
             saveCheckInFile(check, check[5], result);
             return false;
