@@ -16,10 +16,6 @@
 var Files = java.nio.file.Files;
 var status = "[GREEN]";
 var propertiesFile = "validation.properties";
-var red = '\033[0;31m';
-var green = '\033[0;32m';
-var amber = '\033[0;33m';
-var nc = '\033[0m';
 var descriptions = readDescriptions();
 
 print("Environment properties check script");
@@ -30,8 +26,13 @@ print("OS is " + os + ".\n");
 
 // Run platform checks
 if (os === "Linux") {
+    var red = '\033[0;31m';
+    var green = '\033[0;32m';
+    var amber = '\033[0;33m';
+    var nc = '\033[0m';
     checkLinux(descriptions.linux);
     checkJavaVersion("sh -c", descriptions.javaCheck);
+    print("\nOverall checks status: " + getRagColour(status, status));
 }
 else if (os === "Mac OS X") {
     print("Purpose of this script is to validate production environment in which Diffusion " +
@@ -40,11 +41,15 @@ else if (os === "Mac OS X") {
      "https://docs.pushtechnology.com/docs/latest/manual/html/administratorguide/installation/system_requirements.html");
 }
 else {
+    var red = '';
+    var green = '';
+    var amber = '';
+    var nc = '';
     checkWindows(descriptions.windows);
     checkJavaVersion("cmd /C", descriptions.javaCheck);
+    print("\nOverall checks status: " + status);    
 }
 
-print("\nOverall checks status: " + status);
 ///////////////////////////////////////////////////////////////////////////////////////
 
 function createReportFile(fileName) {
