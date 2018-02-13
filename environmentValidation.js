@@ -329,8 +329,7 @@ function checkMultipleValuesSetting(shell, check, expectedValues) {
         }
     }
 
-    printTestResult(check[0], check[5]);
-
+    printTestResult(check[0], "[GREEN]");
     saveCheckInFile(check, "[GREEN]", result);
     return status;
 }
