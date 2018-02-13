@@ -118,7 +118,7 @@
              "auditing_disabled"],
         "openFilesSoftLimit" :
             ["open files soft limit.",
-             "The open files limit defines how many files the Diffusion process can open for the specific user, and hence the number of open connections. Consider changing the limit if you need to support many client connections. To permanently change this setting add or change the line:\n\t*\tsoft\tnofile\t999998\nas a root user in the /etc/security/limits.conf file. Executing 'man limits.conf' provides more details about this file.",
+             "The open files limit defines how many files a process can open for the specific user, and hence the number of open connections. Consider changing the limit if you need to support many client connections. To permanently change this setting add or change the line:\n\t*\tsoft\tnofile\t999998\nas a root user in the /etc/security/limits.conf file. Executing 'man limits.conf' provides more details about this file.",
              "prlimit -o RESOURCE,SOFT|grep NOFILE|awk '{print $NF}'",
              ">",
              999998,
@@ -126,7 +126,7 @@
              "user_open_files_soft_limit"],
         "openFilesHardLimit" :
             ["open files hard limit.",
-             "The open files limits defines how many files the Diffusion process can open for the specific user, and hence the number of open connections. Consider changing the limit if you need to support many client connections. To permanently change this setting add or change the line:\n\t*\thard\tnofile\t999998\n as a root user in the /etc/security/limits.conf. Executing 'man limits.conf' provides more details about this file.",
+             "The open files limits defines how many files a process can open for any user. The open files soft limit can never be more than the hard limit. Consider changing the limit if you need to support many client connections. To permanently change this setting add or change the line:\n\t*\thard\tnofile\t999998\n as a root user in the /etc/security/limits.conf. Executing 'man limits.conf' provides more details about this file.",
              "prlimit -o RESOURCE,HARD|grep NOFILE|awk '{print $NF}'",
              ">",
              999998,
