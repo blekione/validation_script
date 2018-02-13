@@ -85,7 +85,7 @@ function checkLinux(linux) {
     var properties = [linux.software.perf, linux.software.lsof, linux.software.sysstat];
     var failures = [];
 
-    var testMessage = "system time synchronisation is present.";
+    var testMessage = "system time synchronisation.";
     if (checkProperty(shell, linux.software.ntpdInstalled, false)) {
         saveCheckInFile(linux.software.ntpdInstalled, "[GREEN]", true);
         var ntpdRunning = linux.software.ntpdRunning;
@@ -101,7 +101,7 @@ function checkLinux(linux) {
     }
     else if (checkProperty(shell, linux.software.chronydInstalled, false)) {
         saveCheckInFile(linux.software.chronydInstalled, "[GREEN]", true);
-        var chronyRunning = linux.software.chronydRunning;
+        var chronydRunning = linux.software.chronydRunning;
         if (checkProperty(shell, chronydRunning, false)) {
             printTestResult(testMessage, "[GREEN]");
             saveCheckInFile(chronydRunning, "[GREEN]", true);
