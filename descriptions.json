@@ -198,22 +198,6 @@
              16777215,
              "[AMBER]",
              "sysctl_net.core.optmem_max"],
-        "netIpv4TcpRmem" :
-            ["the min, default, and max size of the TCP socket receive buffers.",
-             "For systems with high data and connection rates, it is recommended to increase TCP receive buffer values to min=4096, default=16384 and max=16777216. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\t net.ipv4.tcp_rmem=\"4096 16384 16777216\"",
-             "sysctl net.ipv4.tcp_rmem -n",
-             "===",
-             "4096 16384 16777216",
-             "[AMBER]",
-             "sysctl_net.ipv4.tcp_rmem"],
-        "netIpv4TcpWmem" :
-            ["the min, default, and max size of the TCP socket send buffers.",
-             "For systems with high data and connection rates, it is recommended to increase TCP send buffer values to min=4096, default=16384 and max=16777216. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\t net.ipv4.tcp_wmem=\"4096 16384 16777216\"",
-             "sysctl net.ipv4.tcp_wmem -n",
-             "===",
-             "4096 16384 16777216",
-             "[AMBER]",
-             "sysctl_net.ipv4.tcp_wmem"],
         "netIpv4TCPMaxTWBuckets" :
             ["the maximum number of TCP sockets in TIME WAIT state.",
              "To prevent simple DOS attacks, it is recommended to increase the maximum allowed number of sockets in TIME_WAIT state. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_max_tw_buckets=2000000",
@@ -270,7 +254,23 @@
          "===",
          "999999",
          "[AMBER]",
-         "sysctl_net.ipv4.tcp_mem"]
+         "sysctl_net.ipv4.tcp_mem"],
+    "netIpv4TcpRmem" :
+        ["the min, default, and max size of the TCP socket receive buffers.",
+         "For systems with high data and connection rates, it is recommended to increase TCP receive buffer values to min=4096, default=16384 and max=16777216. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\t net.ipv4.tcp_rmem=\"4096 16384 16777216\"",
+         "sysctl net.ipv4.tcp_rmem -n",
+         "===",
+         "4096 16384 16777216",
+         "[AMBER]",
+         "sysctl_net.ipv4.tcp_rmem"],
+    "netIpv4TcpWmem" :
+        ["the min, default, and max size of the TCP socket send buffers.",
+         "For systems with high data and connection rates, it is recommended to increase TCP send buffer values to min=4096, default=16384 and max=16777216. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\t net.ipv4.tcp_wmem=\"4096 16384 16777216\"",
+         "sysctl net.ipv4.tcp_wmem -n",
+         "===",
+         "4096 16384 16777216",
+         "[AMBER]",
+         "sysctl_net.ipv4.tcp_wmem"]
 },
 "javaCheck" : {
     "javaVersionMajor" :

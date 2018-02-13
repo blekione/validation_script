@@ -151,12 +151,27 @@ function checkLinux(linux) {
     print("----------------------------------");
     checkStatus = "[GREEN]";
     properties = getProperties(linux.network);
-    var initialFailures = [];
-    if (!checkTcpMem(shell, linux.netIpv4TcpMem)) {
-        checkStatus = linux.netIpv4TcpMem[5];
+    var initialFailures = []
+    
+    var maxConnections = linux.netIpv4TcpMem[4];
+    var expectedValues = [
+        (maxConnections * 0.4) | 0, // '| 0' "casts" double to int
+        (maxConnections * 1.05) | 0,
+        (maxConnections * 1.6) | 0];
+    if (!checkMultipleValuesSetting(shell, linux.netIpv4TcpMem, expectedValues)) {
         initialFailures.push(linux.netIpv4TcpMem);
-        print(linux.netIpv4TcpMem[1]);
     }
+
+    expectedValues = linux.netIpv4TcpRmem[4].split(" ");
+    if (!checkMultipleValuesSetting(shell, linux.netIpv4TcpRmem, expectedValues)) {
+        initialFailures.push(linux.netIpv4TcpRmem);
+    }
+
+    expectedValues = linux.netIpv4TcpWmem[4].split(" ");
+    if (!checkMultipleValuesSetting(shell, linux.netIpv4TcpWmem, expectedValues)) {
+        initialFailures.push(linux.netIpv4TcpWmem);
+    }
+
     checkStatus = doCheck(shell, properties, initialFailures);
     status = updateStatus(status, checkStatus);
     print("----------------------------------");
@@ -300,25 +315,24 @@ function updateStatus(initStatus, newStatus) {
     return initStatus;
 }
 
-function checkTcpMem(shell, check) {
-    var maxConnections = check[4];
 
-    var expectedValues = [
-        (maxConnections * 0.4) | 0, // '| 0' "casts" double to int
-        (maxConnections * 1.05) | 0,
-        (maxConnections * 1.6) | 0];
+function checkMultipleValuesSetting(shell, check, expectedValues) {
+    var status = true
     var result = getCheckResult(shell, check);
     var results = result.split("\t");
     
     for (var i = 0; i < results.length; i++) {
         if (results[i] !== expectedValues[i]) {
-            printTestResult(check[0],check[5]);
+            printTestResult(check[0] + " " + check[1],check[5]);
             saveCheckInFile(check, check[5], result);
             return false;
         }
     }
+
+    printTestResult(check[0], check[5]);
+
     saveCheckInFile(check, "[GREEN]", result);
-    return true;
+    return status;
 }
 
 function printTestResult(test, ragStatus) {
