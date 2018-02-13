@@ -252,7 +252,7 @@
          "Memory pressure settings for the memory allocated for TCP sockets should be adequate for the number of expected connections. Setting this too low can affect performance, and may lead to dropped connections. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_mem=\"min default max\"\nwhere:\n\t min = expectedConnections * 0.4\n\t default = expectedConnections * 1.05\n\t max = expectedConnections * 1.6",
          "sysctl net.ipv4.tcp_mem -n",
          "==",
-         999999",
+         999999,
          "[AMBER]",
          "sysctl_net.ipv4.tcp_mem"],
     "netIpv4TcpRmem" :
