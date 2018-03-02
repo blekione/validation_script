@@ -1,9 +1,9 @@
 #!/usr/bin/env jjs
 //
-// The script check system environment properties against DIffusion requirements.
+// The script check system environment properties against Diffusion requirements.
 //
 // The script uses jjs command line tool which is a part of the Nashorn JavaScript
-// engine which is a part of the Java 8.
+// engine which is a part of Java 8.
 // (https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/toc.html)
 // To run script from Linux OS:
 //    chmod u+x environmentValidation.js
@@ -14,7 +14,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////
 
 var Files = java.nio.file.Files;
-var status = "[GREEN]";
+var overallStatus = "[GREEN]";
 var propertiesFile = "validation.properties";
 var descriptions = readDescriptions();
 
@@ -32,11 +32,11 @@ if (os === "Linux") {
     var nc = '\033[0m';
     checkLinux(descriptions.linux);
     checkJavaVersion("sh -c", descriptions.javaCheck);
-    print("\nOverall checks status: " + getRagColour(status, status));
+    print("\nOverall checks status: " + getRagColour(overallStatus, overallStatus));
 }
 else if (os === "Mac OS X") {
     print("Purpose of this script is to validate production environment in which Diffusion " +
-     "server will be running. Diffusion is not supported on Mac OS X." +
+     "server will be running. Mac OS X is not certified as a production system for Diffusion." +
      " For more information check " +
      "https://docs.pushtechnology.com/docs/latest/manual/html/administratorguide/installation/system_requirements.html");
 }
@@ -47,7 +47,7 @@ else {
     var nc = '';
     checkWindows(descriptions.windows);
     checkJavaVersion("cmd /C", descriptions.javaCheck);
-    print("\nOverall checks status: " + status);    
+    print("\nOverall checks status: " + overallStatus);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -81,52 +81,52 @@ function checkLinux(linux) {
     print("Test kernel version:");
     var checkStatus = "[GREEN]";
     checkStatus = doCheck(shell, [linux.kernelVersion], []);
-    status = updateStatus(status, checkStatus);
+    overallStatus = updateStatus(overallStatus, checkStatus);
 
     print("\n----------------------------------");
-    print("Test required software for Linux OS:");
+    print("Test for software required in Linux OS:");
     print("----------------------------------");
     checkStatus = "[GREEN]";
     var properties = [linux.software.perf, linux.software.lsof, linux.software.sysstat];
     var failures = [];
 
-    var testMessage = "system time synchronisation.";
+    var testMessage = "system time synchronisation installed and running [expected] / [result]: [true] / [false].\n";
     if (checkProperty(shell, linux.software.ntpdInstalled, false)) {
         saveCheckInFile(linux.software.ntpdInstalled, "[GREEN]", true);
         var ntpdRunning = linux.software.ntpdRunning;
-        if (checkProperty(shell, ntpdRunning, false)) {
-            printTestResult(testMessage, "[GREEN]");
+        if (checkProperty(shell, ntpdRunning, true)) {
+            // printTestResult(testMessage, "[GREEN]");
             saveCheckInFile(ntpdRunning, "[GREEN]", true);
         }
         else {
-            printTestResult(ntpdRunning[1], ntpdRunning[5]);
-            saveCheckInFile(ntpdRunning, ntpdRunning[5], false);
+            // printTestResult(ntpdRunning.name, ntpdRunning.ragStatus);
+            saveCheckInFile(ntpdRunning, ntpdRunning.ragStatus, false);
             failures.push(ntpdRunning);
         }
     }
     else if (checkProperty(shell, linux.software.chronydInstalled, false)) {
         saveCheckInFile(linux.software.chronydInstalled, "[GREEN]", true);
         var chronydRunning = linux.software.chronydRunning;
-        if (checkProperty(shell, chronydRunning, false)) {
-            printTestResult(testMessage, "[GREEN]");
+        if (checkProperty(shell, chronydRunning, true)) {
+            // printTestResult(testMessage, "[GREEN]");
             saveCheckInFile(chronydRunning, "[GREEN]", true);
         }
         else {
-            printTestResult(chronydRunning[1], chronydRunning[5]);
-            saveCheckInFile(chronydRunning, chronydRunning[5], false);
+            // printTestResult(chronydRunning.name, chronydRunning.ragStatus);
+            saveCheckInFile(chronydRunning, chronydRunning.ragStatus, false);
             failures.push(chronydRunning);
         }
     }
     else {
-        printTestResult(testMessage + " " + linux.software.chronydInstalled[1], linux.software.chronydInstalled[5]);
-        saveCheckInFile(linux.software.chronydInstalled, linux.software.chronydInstalled[5], false);
+        printTestResult(testMessage + linux.software.chronydInstalled.description, linux.software.chronydInstalled.ragStatus);
+        saveCheckInFile(linux.software.chronydInstalled, linux.software.chronydInstalled.ragStatus, false);
         failures.push(linux.software.chronydInstalled);
     }
 
     checkStatus = doCheck(shell, properties, failures);
-    status = updateStatus(status, checkStatus);
+    overallStatus = updateStatus(overallStatus, checkStatus);
     print("----------------------------------");
-    print("Test required software finished. Status " + getRagColour(checkStatus, checkStatus));
+    print("Test for software required finished. Status " + getRagColour(checkStatus, checkStatus));
     print("----------------------------------");
 
     print("\n----------------------------------");
@@ -135,7 +135,7 @@ function checkLinux(linux) {
     checkStatus = "[GREEN]";
     properties = getProperties(linux.memory);
     checkStatus = doCheck(shell, properties, []);
-    status = updateStatus(status, checkStatus);
+    overallStatus = updateStatus(overallStatus, checkStatus);
     print("----------------------------------");
     print("Test Linux OS memory settings finished. Status " + getRagColour(checkStatus, checkStatus));
     print("----------------------------------");
@@ -146,7 +146,7 @@ function checkLinux(linux) {
     checkStatus = "[GREEN]";
     properties = getProperties(linux.file_system);
     checkStatus = doCheck(shell, properties, []);
-    status = updateStatus(status, checkStatus);
+    overallStatus = updateStatus(overallStatus, checkStatus);
     print("----------------------------------");
     print("Test Linux OS file system settings finished. Status " + getRagColour(checkStatus, checkStatus));
     print("----------------------------------");
@@ -156,9 +156,9 @@ function checkLinux(linux) {
     print("----------------------------------");
     checkStatus = "[GREEN]";
     properties = getProperties(linux.network);
-    var initialFailures = []
+    var initialFailures = [];
     
-    var maxConnections = linux.netIpv4TcpMem[4];
+    var maxConnections = linux.netIpv4TcpMem.expected;
     var expectedValues = [
         (maxConnections * 0.4) | 0, // '| 0' "casts" double to int
         (maxConnections * 1.05) | 0,
@@ -167,24 +167,25 @@ function checkLinux(linux) {
         initialFailures.push(linux.netIpv4TcpMem);
     }
 
-    expectedValues = linux.netIpv4TcpRmem[4].split(" ");
+    expectedValues = linux.netIpv4TcpRmem.expected.split(" ");
     if (!checkMultipleValuesSetting(shell, linux.netIpv4TcpRmem, expectedValues)) {
         initialFailures.push(linux.netIpv4TcpRmem);
     }
 
-    expectedValues = linux.netIpv4TcpWmem[4].split(" ");
+    expectedValues = linux.netIpv4TcpWmem.expected.split(" ");
     if (!checkMultipleValuesSetting(shell, linux.netIpv4TcpWmem, expectedValues)) {
         initialFailures.push(linux.netIpv4TcpWmem);
     }
 
     checkStatus = doCheck(shell, properties, initialFailures);
-    status = updateStatus(status, checkStatus);
+    overallStatus = updateStatus(overallStatus, checkStatus);
     print("----------------------------------");
     print("Test Linux OS networking settings. Status " + getRagColour(checkStatus, checkStatus));
     print("----------------------------------");
+
 }
 
-function checkWindows(){
+function checkWindows() {
     var shell = "cmd /C ";
 }
 
@@ -192,15 +193,14 @@ function checkJavaVersion(shell, javaDesc) {
     print("\n----------------------------------");
     print("Test Java installation :");
     print("----------------------------------");
-    var version = java.lang.System.getProperty("java.version");
-    version = version.split("_");
+    var version = java.lang.System.getProperty("java.version").split(/[\s_-]+/);
     if (!checkValue(javaDesc.javaVersionMajor, version[0], false) ||
             !checkValue(javaDesc.javaVersionMinor, version[1], false) ||
             !checkValue(javaDesc.jvmVendor, java.lang.System.getProperty("java.vendor.url"), false) ||
             !checkProperty(shell, javaDesc.jdkInstalled, false)) {
         printTestResult("installed JVM is supported.","[RED]");
         print("----------------------------------");
-        print(javaDesc.javaVersionMajor[1]);
+        print(javaDesc.javaVersionMajor.description);
     }
     else {
         printTestResult("installed JVM is supported.", "[GREEN]");
@@ -228,10 +228,10 @@ function getProperties(parent) {
 
 function doCheck(shell, properties, initialFailures) {
     var checkStatus = "[GREEN]";
-    var failures = doPropertiesChecks(shell,properties);
+    var failures = doPropertiesChecks(shell, properties);
     failures = initialFailures.concat(failures);
     failures.forEach(function(failure) {
-        checkStatus = updateStatus(checkStatus, failure[5]);
+        checkStatus = updateStatus(checkStatus, failure.ragStatus);
     });
     return checkStatus;
 }
@@ -245,69 +245,50 @@ function doPropertiesChecks(shell, checks) {
     return failures;
 }
 
-function getCheckResult(shell, check) {
-    var command = shell + "\"" + check[2] + "\"";
+function getCheckResult(shell, shellCommand) {
+    var command = shell + "\"" + shellCommand + "\"";
     var result = `${command}`.trim();
+    // print ("result: " + result);
     return result;
 }
 
 function checkProperty(shell, check, isResultPrintable) {
-    var result = getCheckResult(shell, check);
+    var result = getCheckResult(shell, check.command);
     if (result !== null && !result.equals("")) {
         var resultFirstLine = result.match(/[^\r\n]+/g).shift(); // Removes empty lines from result
         return checkValue(check, resultFirstLine, isResultPrintable);
     }
     else if (isResultPrintable) {
-           printTestResult(check[0], check[5]);
+           printTestResult(check.name, check.ragStatus);
         return false;
     }
     return false;
 }
 
 function checkValue(check, result, isResultPrintable) {
-    var property = check[0];
-    var operator = check[3];
-    var expectedValue = check[4];
-    var ragStatus = check[5];
-    var checkPass = false;
+    var ragStatus = check.ragStatus;
 
-    if (operator == "===" && result === expectedValue) {
-        checkPass = true;
-    }
-    else if (operator == ">" && result > expectedValue) {
-        checkPass = true;
-    }
-    else if (operator == "<" && result < expectedValue) {
-        checkPass = true;
-    }
-    else if (operator == "!=" && result != expectedValue) {
-        checkPass = true;
-    }
-    else if (operator == "==" && result == expectedValue) {
-        checkPass =true;
-    }
-    else if (operator == "contains" && result.contains(expectedValue)) {
-        checkPass = true;
-        result = true;
-    } 
-    else if (operator != "===" && operator != ">" && operator != "<" &&
-            operator != "contains" && operator != "!=" && operator != "==") {
-        print("ERROR!: unknown operator [" + operator + "].");
-        return;
-    }
-    
+    var checkPass = evaluate(result, check);
     if (isResultPrintable) {
         if (checkPass) {
-            ragStatus = "[GREEN]";
-            printTestResult(property, ragStatus);
+            printTestResult(check.name + " [result]: [" + result + "].", "[GREEN]");
         }
         else {
-            printTestResult(property + " " + check[1], ragStatus);
+            printTestResult(check.name + " [expected] / [result]: [" + check.expected + "] / [" + result + "].\n" + check.description, ragStatus);
         }
     }
-    saveCheckInFile(check, ragStatus, result);
 
+    saveCheckInFile(check, ragStatus, result);
     return checkPass;
+}
+
+function evaluate(result, check) {
+    if (check.operant == "contains") {
+        return eval("\"" + result + "\".contains(\"" + check.expected + "\") ? true : false;");
+    }
+    else {
+        return eval(result + check.operant + check.expected + " ? true : false;");
+    }
 }
 
 function updateStatus(initStatus, newStatus) {
@@ -320,22 +301,20 @@ function updateStatus(initStatus, newStatus) {
     return initStatus;
 }
 
-
 function checkMultipleValuesSetting(shell, check, expectedValues) {
-    var status = true
-    var result = getCheckResult(shell, check);
+    var result = getCheckResult(shell, check.command);
     var results = result.split("\t");
     for (var i = 0; i < results.length; i++) {
         if (results[i] != expectedValues[i]) {
-            printTestResult(check[0] + " " + check[1],check[5]);
-            saveCheckInFile(check, check[5], result);
+            printTestResult(check.name + " [expected] / [result]: ["+ expectedValues[i] + "] / [" + results[i] + "].\n" + check.description, check.ragStatus);
+            saveCheckInFile(check, check.ragStatus, result);
             return false;
         }
     }
 
-    printTestResult(check[0], "[GREEN]");
+    printTestResult(check.name, "[GREEN]");
     saveCheckInFile(check, "[GREEN]", result);
-    return status;
+    return true;
 }
 
 function printTestResult(test, ragStatus) {
@@ -345,7 +324,7 @@ function printTestResult(test, ragStatus) {
 function getRagColour(ragStatus, message) {
     if (ragStatus === "[GREEN]") {
         return green + message + nc;
-    } 
+    }
     else if (ragStatus === "[AMBER]") {
         return amber + message + nc;
     }
@@ -357,7 +336,7 @@ function getRagColour(ragStatus, message) {
     }
 }
 
-function saveCheckInFile(check,ragStatus, result) {
-    writeFile(check[6] + "_status = " + ragStatus);
-    writeFile(check[6] + " = " + result);
+function saveCheckInFile(check, ragStatus, result) {
+    writeFile(check.savedAs + "_status = " + ragStatus);
+    writeFile(check.savedAs + " = " + result);
 }
