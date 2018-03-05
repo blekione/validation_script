@@ -47,8 +47,7 @@
              "operant" : ">",
              "expected" : 0,
              "ragStatus" : "[AMBER]",
-             "savedAs" : "ntpd_running",
-             "func" : "return true;"},
+             "savedAs" : "ntpd_running"},
         "chronydInstalled" :
             {"name" : "chronyd installed",
              "description" : "chronyd is a system network time protocol daemon. It synchronises the system time with Internet standard time servers. We recommend you install it. chronyd can be installed using your Linux distribution standard package manager (yum, apt, etc.).",
@@ -56,8 +55,7 @@
              "operant" : "contains",
              "expected" : "chronyd (chrony) version",
              "ragStatus" : "[AMBER]",
-             "savedAs" : "chrony_installed",
-             "func" : "return true;"},
+             "savedAs" : "chrony_installed"},
         "chronydRunning" :
             {"name" : "chronyd is running",
              "description" : "chronyd system time synchronisation deamon is installed, but it is not running. To start chronyd, execute as a root user:\n\t/etc/init.d/chrony start",
@@ -65,8 +63,7 @@
              "operant" : ">",
              "expected" : 0,
              "ragStatus" : "[AMBER]",
-             "savedAs" : "chrony_running",
-             "func" : "return true;"}
+             "savedAs" : "chrony_running"}
     },
     "memory" : {
         "freeMemory" :
@@ -76,8 +73,7 @@
              "operant" : ">=",
              "expected" : 2,
              "ragStatus" : "[RED]",
-             "savedAs" : "free_memory",
-             "func" : "return true;"},
+             "savedAs" : "free_memory"},
         "thpDisabled" :
             {"name" : "transparent huge pages used",
              "description" : "Transparent huge pages (THP) can cause long pauses with large JVM heaps (> 1 GB) and should be disabled. THP can be disabled with the following steps:\n\t1. As a root user, append or change `transparent_hugepage=never` to the GRUB_CMDLINE_LINUX option in the /etc/default/grub file (eg.GRUB_CMDLINE_LINUX=\"transparent_hugepage=never\")\n\t2. Rebuild grub.conf file with: grub-mkconfig -o /boot/grub/grub.cfg .",
@@ -85,8 +81,7 @@
              "operant" : "contains",
              "expected" : "always madvise [never]",
              "ragStatus" : "[AMBER]",
-             "savedAs" : "transparent_hude_pages",
-             "func" : "return true;"},
+             "savedAs" : "transparent_hude_pages"},
         "swappiness" :
             {"name" : "memory swappiness setting",
              "description" : "Saving the memory cache to a swap file has a high performance cost, and should be avoided by minimizing swapping. Please consider setting vm.swappiness to 0 (disables swapping entirely for kernels > 3.5) or 1 (minimal amount of swapping without disabling it entirely). To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tvm.swappiness=0",
@@ -94,8 +89,7 @@
              "operant" : "<=",
              "expected" : 1,
              "ragStatus" : "[AMBER]",
-             "savedAs" : "sysctl_vm.swappiness",
-             "func" : "return true;"},
+             "savedAs" : "sysctl_vm.swappiness"},
         "dirtyRatio" :
             {"name" : "max memory level (in %) which can be filled before everything must be written to disk",
              "description" : "When the system reaches dirty_ratio level, all I/O operations are blocked until dirty pages have been written to disk. This can cause long I/O pauses. It is advisable to use a high value, such as 90, to avoid blocking of I/O operations. To permanently change this setting, add or change the following line in the /etc/sysctl.conf file:\n\tvm.dirty_ratio=90",
@@ -103,8 +97,7 @@
              "operant" : ">=",
              "expected" : 90,
              "ragStatus" : "[AMBER]",
-             "savedAs" : "sysctl_vw.dirty_ratio",
-             "func" : "return true;"}
+             "savedAs" : "sysctl_vw.dirty_ratio"}
     },
     "file_system" : {
         "ulimitC" :
@@ -114,17 +107,15 @@
              "operant" : "contains",
              "expected" : "unlimited",
              "ragStatus" : "[AMBER]",
-             "savedAs" : "ulimit_core_files",
-             "func" : "return true;"},
+             "savedAs" : "ulimit_core_files"},
         "auditDisabled" :
             {"name" : "auditing of Linux system processes (0 = disabled | 1 = enabled)",
              "description" : "Auditing of Linux system process can cause a small CPU overhead. It is advisable to disable this setting if the audit daemon is not used for tracking system information. Auditing is set up at system boot and can be disabled with the following steps:\n\t1. As a root user, append or change the 'audit=0' kernel parameter of the GRUB_CMDLINE_LINUX option in the /etc/default/grub file (e.g. GRUB_CMDLINE_LINUX=\"audit=0\").\n\t2. Rebuild grub.conf with: grub-mkconfig -o /boot/grub/grub.cfg .",
              "command" : "cat /proc/cmdline|grep -F audit=0|wc -l",
-             "operant" : "==",
-             "expected" : 0,
+             "operant" : "contains",
+             "expected" : "audit = 0",
              "ragStatus" : "[AMBER]",
-             "savedAs" : "auditing_disabled",
-             "func" : "return true;"},
+             "savedAs" : "auditing_disabled"},
         "openFilesSoftLimit" :
             {"name" : "open files soft limit number",
              "description" : "The open files limit defines how many files a process can open for the specific user, and hence the number of open connections. Consider changing the limit if you need to support many client connections. To permanently change this setting add or change the line:\n\t*\tsoft\tnofile\t1000000\nas a root user in the /etc/security/limits.conf file. Executing 'man limits.conf' provides more details about this file.",
@@ -132,8 +123,7 @@
              "operant" : ">=",
              "expected" : 1000000,	
              "ragStatus" : "[RED]",
-             "savedAs" : "user_open_files_soft_limit",
-             "func" : "return true;"},
+             "savedAs" : "user_open_files_soft_limit"},
         "openFilesHardLimit" :
             {"name" : "open files hard limit number",
              "description" : "The open files limits defines how many files a process can open for any user. The open files soft limit can never be more than the hard limit. Consider changing the limit if you need to support many client connections. To permanently change this setting add or change the line:\n\t*\thard\tnofile\t1000000\n as a root user in the /etc/security/limits.conf. Executing 'man limits.conf' provides more details about this file.",
@@ -141,8 +131,7 @@
              "operant" : ">=",
              "expected" : 1000000,
              "ragStatus" : "[RED]",
-             "savedAs" : "user_open_files_hard_limit",
-             "func" : "return true;"},
+             "savedAs" : "user_open_files_hard_limit"},
         "openFilesHardLimitSetToDefault" :
             {"name" : "open files hard limit is not set to default value (4096)",
              "description" : "When 'ulimit -nH' check returns 4096, it may indicate that the value of the 'hard nofile' limit for the user in the /etc/security/limits.conf file is set to be greater than the value of the 'fs.nr_open' limit in the /etc/sysctl.conf file. Please check both settings, as in this case the system will enforce the default value (4096) of the 'hard nofile' limit, limiting the maximum number of open connections possible on this system.", 
@@ -150,8 +139,7 @@
              "operant" : "!=",
              "expected" : 4096,
              "ragStatus" : "[RED]",
-             "savedAs" : "user_open_files_hard_limit_set_to_default",
-             "func" : "return true;"},
+             "savedAs" : "user_open_files_hard_limit_set_to_default"},
         "fileDescriptors" :
             {"name" : "max number of file descriptors",
              "description" : "Max number of concurrent file descriptors defines how many files can be open on a kernel level, and hence the number of open connections. Consider changing the limit if you need to support many client connections. To permanently change this setting, add or change the following line in the /etc/sysctl.conf file:\n\tfs.file-max=1000000",
@@ -159,8 +147,7 @@
              "operant" : ">=",
              "expected" : 1000000,
              "ragStatus" : "[RED]",
-             "savedAs" : "sysctl_fs.file-max",
-             "func" : "return true;"},
+             "savedAs" : "sysctl_fs.file-max"},
         "openFileDescriptorsPerProcess" :
             {"name" : "max number of open file descriptors per process",
              "description" : "fs.nr_open defines the max number of open files per process on the kernel level, and hence the number of open connections. Consider changing the limit if you need to support many client connections. To permanently change this setting, add or change the following line in the /etc/sysctl.conf file:\n\tfs.nr_open=1000000",
@@ -168,8 +155,7 @@
              "operant" : ">=",
              "expected" : 1000000,
              "ragStatus" : "[RED]",
-             "savedAs" : "sysctl_fs.nr_open",
-             "func" : "return true;"}
+             "savedAs" : "sysctl_fs.nr_open"}
     },
     "network" : {
         "netCoreRmemMax" :
@@ -179,8 +165,7 @@
              "operant" : ">=",
              "expected" : 16777216,
              "ragStatus" : "[AMBER]",
-             "savedAs" : "sysctl_net.core.rmem_max",
-             "func" : "return true;"},
+             "savedAs" : "sysctl_net.core.rmem_max"},
         "netCoreWmemMax" :
             {"name" : "max size of the network socket send buffer",
              "description" : "For systems with high data rates, it is recommended to increase the global maximum socket send buffer size. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.core.wmem_max=16777216",
@@ -188,8 +173,7 @@
              "operant" : ">=",
              "expected" : 16777216,
              "ragStatus" : "[AMBER]",
-             "savedAs" : "sysctl_net.core.wnem_max",
-             "func" : "return true;"},
+             "savedAs" : "sysctl_net.core.wnem_max"},
         "netCoreRmemDefault" :
             {"name" : "default size of the network socket receive buffers",
              "description" : "For systems with high data rates, it is recommended to increase the global default socket receive buffer size to the maximum value. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.core.rmem_default=16777216",
@@ -197,8 +181,7 @@
              "operant" : ">=",
              "expected" : 16777216,
              "ragStatus" : "[AMBER]",
-             "savedAs" : "sysctl_net.core.rmem_default",
-             "func" : "return true;"},
+             "savedAs" : "sysctl_net.core.rmem_default"},
         "netCoreWmemDefault" :
             {"name" : "default size of the network socket send buffers",
              "description" : "For systems with high data rates, it is recommended to increase the global default socket send buffer size to the maximum value. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.core.wmem_default=16777216",
@@ -206,8 +189,7 @@
              "operant" : ">=",
              "expected" : 16777216,
              "ragStatus" : "[AMBER]",
-             "savedAs" : "sysctl_net.core.wmem_default",
-             "func" : "return true;"},
+             "savedAs" : "sysctl_net.core.wmem_default"},
         "netCoreOptmemMax" :
             {"name" : "max size of the network socket option memory buffers",
              "description" : "For systems with high data rates, it is recommended to increase maximum ancillary buffer size allowed per socket to the same value as socket buffer maximum size. Ancillary data is used to receive the extra packet related services/information from the kernel to the user process. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\t net.core.optmem_max=16777216",
@@ -215,8 +197,7 @@
              "operant" : ">=",
              "expected" : 16777216,
              "ragStatus" : "[AMBER]",
-             "savedAs" : "sysctl_net.core.optmem_max",
-             "func" : "return true;"},
+             "savedAs" : "sysctl_net.core.optmem_max"},
         "netIpv4TCPMaxTWBuckets" :
             {"name" : "maximum number of TCP sockets in TIME WAIT state",
              "description" : "To prevent simple DOS attacks, it is recommended to increase the maximum allowed number of sockets in TIME_WAIT state. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_max_tw_buckets=2000000",
@@ -224,8 +205,7 @@
              "operant" : ">=",
              "expected" : 2000000,
              "ragStatus" : "[AMBER]",
-             "savedAs" : "sysctl_net.ipv4.tcp_max_tw_buckets",
-             "func" : "return true;"},
+             "savedAs" : "sysctl_net.ipv4.tcp_max_tw_buckets"},
         "netIpv4TcpFinTimeout" :
             {"name" : "system waiting time for a FIN packet before the socket is forcibly closed (in seconds)",
              "description" : "For systems with high connection rates, it is recommended to decrease the time the system will wait for a FIN packet before the socket is forcibly closed. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_fin_timeout=30",
@@ -233,8 +213,7 @@
              "operant" : "==",
              "expected" : 30,
              "ragStatus" : "[AMBER]",
-             "savedAs" : "sysctl_net.ipv4.tcp_fin_timeout",
-             "func" : "return true;"},
+             "savedAs" : "sysctl_net.ipv4.tcp_fin_timeout"},
         "netIpv4TcpTWReuse" :
             {"name" : "enabled reuse of sockets in TIME WAIT state when it is safe (0 = disabled | 1 = enabled)",
              "description" : "For systems with high connection rates, it is recommended to enable reuse of sockets in the TIME_WAIT state when it is safe for the system to do so. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_tw_reuse=1",
@@ -242,8 +221,7 @@
              "operant" : "==",
              "expected" : 1,	
              "ragStatus" : "[AMBER]",
-             "savedAs" : "sysctl_net.ipv4.tcp_tw_reuse",
-             "func" : "return true;"},
+             "savedAs" : "sysctl_net.ipv4.tcp_tw_reuse"},
        "netCoreNetdevMaxBacklog" :
             {"name" : "size of the receive packets queue",
              "description" : "For systems with high connection rates, where packets can arrive quicker than they are processed, it is recommended to increase the size of the receive packets queue. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.core.netdev_max_backlog=50000",
@@ -251,8 +229,7 @@
              "operant" : ">=",
              "expected" : 50000,
              "ragStatus" : "[AMBER]",
-             "savedAs" : "sysctl_net.core.netdev_max_backlog",
-             "func" : "return true;"},
+             "savedAs" : "sysctl_net.core.netdev_max_backlog"},
        "netIpv4TcpMaxSynBacklog" :
             {"name" : "max number of queued connection requests without ACK from the client",
              "description" : "For systems with high connection rates, it is recommended to increase the size of the queue for connections without request ACK from the client. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_max_syn_backlog=10000",
@@ -260,8 +237,7 @@
              "operant" : ">=",
              "expected" : 10000,
              "ragStatus" : "[AMBER]",
-             "savedAs" : "sysctl_net.ipv4.tcp_max_syn_backlog",
-             "func" : "return true;"},
+             "savedAs" : "sysctl_net.ipv4.tcp_max_syn_backlog"},
        "netIpv4TcpSlowStartAfterIdle" :
             {"name" : "disabled resizing the congestion window after an idle to default value (0 = disabled | 1 = enabled)",
              "description" : "Resizing the congestion window after connections have been idle can have a negative impact on the connection performance and should be disabled. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\tnet.ipv4.tcp_slow_start_after_idle=0",
@@ -269,8 +245,7 @@
              "operant" : "==",
              "expected" : 0,
              "ragStatus" : "[RED]",
-             "savedAs" : "sysctl_net.ipv4.tcp_slow_start_after_idle",
-             "func" : "return true;"}
+             "savedAs" : "sysctl_net.ipv4.tcp_slow_start_after_idle"}
     },
     "netIpv4TcpMem" : 
         {"name" : "memory pressure settings compare to the number of open connections settings (expectedConnections = 1000000)",
@@ -279,8 +254,7 @@
          "operant" : "==",
          "expected" : 1000000,
          "ragStatus" : "[AMBER]",
-         "savedAs" : "sysctl_net.ipv4.tcp_mem",
-         "func" : "return true;"},
+         "savedAs" : "sysctl_net.ipv4.tcp_mem"},
     "netIpv4TcpRmem" :
         {"name" : "(min default max) size of the TCP socket receive buffers",
          "description" : "For systems with high data and connection rates, it is recommended to increase TCP receive buffer values to min=4096, default=16384 and max=16777216. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\t net.ipv4.tcp_rmem=\"4096 16384 16777216\"",
@@ -288,8 +262,7 @@
          "operant" : "==",
          "expected" : "4096 16384 16777216",
          "ragStatus" : "[AMBER]",
-         "savedAs" : "sysctl_net.ipv4.tcp_rmem",
-         "func" : "return true;"},
+         "savedAs" : "sysctl_net.ipv4.tcp_rmem"},
     "netIpv4TcpWmem" :
         {"name" : "(min default max) size of the TCP socket send buffers",
          "description" : "For systems with high data and connection rates, it is recommended to increase TCP send buffer values to min=4096, default=16384 and max=16777216. To change this setting permanently, add or change the following line in the /etc/sysctl.conf file:\n\t net.ipv4.tcp_wmem=\"4096 16384 16777216\"",
@@ -297,8 +270,7 @@
          "operant" : "==",
          "expected" : "4096 16384 16777216",
          "ragStatus" : "[AMBER]",
-         "savedAs" : "sysctl_net.ipv4.tcp_wmem",
-         "func" : "return true;"}
+         "savedAs" : "sysctl_net.ipv4.tcp_wmem"}
 },
 "javaCheck" : {
     "javaVersionMajor" :
@@ -308,8 +280,7 @@
          "operant" : "contains",
          "expected" : "1.8.0",
          "ragStatus" : "[RED]",
-         "savedAs" : "java_version_major",
-         "func" : "return true;"},
+         "savedAs" : "java_version_major"},
     "javaVersionMinor" :
         {"name" : "minimum update version of Java",
          "description" : "",
@@ -317,8 +288,7 @@
          "operant" : ">=",
          "expected" : 131,
          "ragStatus" : "[RED]",
-         "savedAs" : "java_version_minor",
-         "func" : "return true;"},
+         "savedAs" : "java_version_minor"},
     "jvmVendor" :
         {"name" : "installed Oracle JVM",
          "descrition" : "",
@@ -326,8 +296,7 @@
          "operant" : "contains",
          "expected" : "oracle",
          "ragStatus" : "[RED]",
-         "savedAs" : "java_vendor",	
-         "func" : "return true;"},
+         "savedAs" : "java_vendor"},
     "jdkInstalled" : 
         {"name" : "installed JDK",
          "description" : "",
@@ -335,7 +304,6 @@
          "operant" : "contains",
          "expected" : "Usage: javac",
          "ragStatus" : "[RED]",
-         "savedAs" : "java_jdk_installed",
-         "func" : "return true;"}
+         "savedAs" : "java_jdk_installed"}
     }
 }
