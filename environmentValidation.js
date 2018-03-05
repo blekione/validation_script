@@ -182,7 +182,6 @@ function checkLinux(linux) {
     print("----------------------------------");
     print("Test Linux OS networking settings. Status " + getRagColour(checkStatus, checkStatus));
     print("----------------------------------");
-
 }
 
 function checkWindows() {
@@ -259,7 +258,7 @@ function checkProperty(shell, check, isResultPrintable) {
         return checkValue(check, resultFirstLine, isResultPrintable);
     }
     else if (isResultPrintable) {
-           printTestResult(check.name, check.ragStatus);
+           printTestResult(check.name + " [expected]: [" + check.expected + "], but check returns NULL or empty value.", check.ragStatus);
         return false;
     }
     return false;
