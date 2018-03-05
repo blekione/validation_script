@@ -259,6 +259,7 @@ function checkProperty(shell, check, isResultPrintable) {
     }
     else if (isResultPrintable) {
            printTestResult(check.name + " [expected]: [" + check.expected + "], but check returns NULL or empty value.", check.ragStatus);
+           saveCheckInFile(check, check.ragStatus, "NULL");
         return false;
     }
     return false;
