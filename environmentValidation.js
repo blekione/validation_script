@@ -6,10 +6,9 @@
 // engine which is a part of Java 8.
 // (https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/toc.html)
 // To run script from Linux OS:
-//    chmod u+x environmentValidation.js
 //    ./environmentValidation.js
 //
-// To run script from Windows OS:
+// To run script from Windows OS make sure <java_home> is added to the Path and:
 //    jjs environmentValidation.js
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -17,6 +16,9 @@ var Files = java.nio.file.Files;
 var overallStatus = "[GREEN]";
 var propertiesFile = "validation.properties";
 var descriptions = readDescriptions();
+var newLineSeparator = "\n----------------------------------";
+var lineSeparator = "----------------------------------";
+var giga = 1024 * 1024 * 1024;
 
 print("Environment properties check script");
 createReportFile(propertiesFile);
@@ -30,24 +32,29 @@ if (os === "Linux") {
     var green = '\033[0;32m';
     var amber = '\033[0;33m';
     var nc = '\033[0m';
-    checkLinux(descriptions.linux);
     checkJavaVersion("sh -c", descriptions.javaCheck);
+    checkHardware(descriptions.hardwareCheck);
+    checkLinux(descriptions.linux);
     print("\nOverall checks status: " + getRagColour(overallStatus, overallStatus));
 }
 else if (os === "Mac OS X") {
     print("Purpose of this script is to validate production environment in which Diffusion " +
-     "server will be running. Mac OS X is not certified as a production system for Diffusion." +
+     "server will be running. MacOS is not certified as a production system for Diffusion." +
      " For more information check " +
      "https://docs.pushtechnology.com/docs/latest/manual/html/administratorguide/installation/system_requirements.html");
 }
-else {
+else if (os.contains("Win")) {
     var red = '';
     var green = '';
     var amber = '';
     var nc = '';
-    checkWindows(descriptions.windows);
     checkJavaVersion("cmd /C", descriptions.javaCheck);
+    checkHardware(descriptions.hardwareCheck);
+    checkWindows(descriptions.windows);
     print("\nOverall checks status: " + overallStatus);
+}
+else {
+    print("I could not recognise operating system. Terminate.");
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -78,14 +85,16 @@ function readDescriptions() {
 function checkLinux(linux) {
     var shell = "sh -c ";
 
+    print(newLineSeparator);
     print("Test kernel version:");
+    print(lineSeparator);
     var checkStatus = "[GREEN]";
     checkStatus = doCheck(shell, [linux.kernelVersion], []);
     overallStatus = updateStatus(overallStatus, checkStatus);
 
-    print("\n----------------------------------");
+    print(newLineSeparator);
     print("Test for software required in Linux OS:");
-    print("----------------------------------");
+    print(lineSeparator);
     checkStatus = "[GREEN]";
     var properties = [linux.software.perf, linux.software.lsof, linux.software.sysstat];
     var failures = [];
@@ -95,11 +104,9 @@ function checkLinux(linux) {
         saveCheckInFile(linux.software.ntpdInstalled, "[GREEN]", true);
         var ntpdRunning = linux.software.ntpdRunning;
         if (checkProperty(shell, ntpdRunning, true)) {
-            // printTestResult(testMessage, "[GREEN]");
             saveCheckInFile(ntpdRunning, "[GREEN]", true);
         }
         else {
-            // printTestResult(ntpdRunning.name, ntpdRunning.ragStatus);
             saveCheckInFile(ntpdRunning, ntpdRunning.ragStatus, false);
             failures.push(ntpdRunning);
         }
@@ -108,11 +115,9 @@ function checkLinux(linux) {
         saveCheckInFile(linux.software.chronydInstalled, "[GREEN]", true);
         var chronydRunning = linux.software.chronydRunning;
         if (checkProperty(shell, chronydRunning, true)) {
-            // printTestResult(testMessage, "[GREEN]");
             saveCheckInFile(chronydRunning, "[GREEN]", true);
         }
         else {
-            // printTestResult(chronydRunning.name, chronydRunning.ragStatus);
             saveCheckInFile(chronydRunning, chronydRunning.ragStatus, false);
             failures.push(chronydRunning);
         }
@@ -125,44 +130,44 @@ function checkLinux(linux) {
 
     checkStatus = doCheck(shell, properties, failures);
     overallStatus = updateStatus(overallStatus, checkStatus);
-    print("----------------------------------");
+    print(lineSeparator);
     print("Test for software required finished. Status " + getRagColour(checkStatus, checkStatus));
-    print("----------------------------------");
+    print(lineSeparator);
 
-    print("\n----------------------------------");
+    print(newLineSeparator);
     print("Test Linux OS memory settings:");
-    print("----------------------------------");
+    print(lineSeparator);
     checkStatus = "[GREEN]";
     properties = getProperties(linux.memory);
     checkStatus = doCheck(shell, properties, []);
     overallStatus = updateStatus(overallStatus, checkStatus);
-    print("----------------------------------");
+    print(lineSeparator);
     print("Test Linux OS memory settings finished. Status " + getRagColour(checkStatus, checkStatus));
-    print("----------------------------------");
+    print(lineSeparator);
 
-    print("\n----------------------------------");
+    print(newLineSeparator);
     print("Test Linux OS file system settings:");
-    print("----------------------------------");
+    print(lineSeparator);
     checkStatus = "[GREEN]";
     properties = getProperties(linux.file_system);
     checkStatus = doCheck(shell, properties, []);
     overallStatus = updateStatus(overallStatus, checkStatus);
-    print("----------------------------------");
+    print(lineSeparator);
     print("Test Linux OS file system settings finished. Status " + getRagColour(checkStatus, checkStatus));
-    print("----------------------------------");
+    print(lineSeparator);
 
-    print("\n----------------------------------");
+    print(newLineSeparator);
     print("Test Linux OS networking settings:");
-    print("----------------------------------");
+    print(lineSeparator);
     checkStatus = "[GREEN]";
     properties = getProperties(linux.network);
     var initialFailures = [];
     
     var maxConnections = linux.netIpv4TcpMem.expected;
     var expectedValues = [
-        (maxConnections * 0.4) | 0, // '| 0' "casts" double to int
-        (maxConnections * 1.05) | 0,
-        (maxConnections * 1.6) | 0];
+        Math.round(maxConnections * 0.4),
+        Math.round(maxConnections * 1.05),
+        Math.round(maxConnections * 1.6)];
     if (!checkMultipleValuesSetting(shell, linux.netIpv4TcpMem, expectedValues)) {
         initialFailures.push(linux.netIpv4TcpMem);
     }
@@ -179,32 +184,92 @@ function checkLinux(linux) {
 
     checkStatus = doCheck(shell, properties, initialFailures);
     overallStatus = updateStatus(overallStatus, checkStatus);
-    print("----------------------------------");
-    print("Test Linux OS networking settings. Status " + getRagColour(checkStatus, checkStatus));
-    print("----------------------------------");
+    print(lineSeparator);
+    print("Test Linux OS networking settings finished. Status " + getRagColour(checkStatus, checkStatus));
+    print(lineSeparator);
+}
+
+function checkHardware(hardwareCheck) {
+    print(newLineSeparator);
+    print("Test available hardware resources:");
+    print(lineSeparator);
+
+    var systemMbean = java.lang.management.ManagementFactory.getOperatingSystemMXBean();
+    var freeMemory = Math.round(systemMbean.getTotalPhysicalMemorySize() / giga);
+    if (!checkValue(hardwareCheck.freeMemory, freeMemory, true)) {
+        overallStatus = updateStatus(overallStatus, hardwareCheck.freeMemory.ragStatus);
+    }
+
+    var cpuCount = systemMbean.getAvailableProcessors();
+    if(!checkValue(hardwareCheck.cpuCount, cpuCount, true)) {
+        overallStatus = updateStatus(overallStatus, hardwareCheck.cpuCount.ragStatus);
+    }
 }
 
 function checkWindows() {
     var shell = "cmd /C ";
+    print(newLineSeparator);
+    print("Test Windows system version:");
+    print(lineSeparator);
+
+    var winVersion = java.lang.System.getProperty("os.name");
+    if (winVersion == "Windows Server 2012 R2" || winVersion == "Windows Server 2016") {
+    printTestResult("operating system " + winVersion + "is supported.", "[GREEN]");
+     print(lineSeparator);
+    }
+    else {
+    printTestResult("operating system " + winVersion + " is not supported.", "[AMBER]");
+    print(lineSeparator);
+    overallStatus = updateStatus(overallStatus, "[AMBER]");
+    }
 }
 
 function checkJavaVersion(shell, javaDesc) {
-    print("\n----------------------------------");
+    print(newLineSeparator);
     print("Test Java installation :");
-    print("----------------------------------");
-    var version = java.lang.System.getProperty("java.version").split(/[\s_-]+/);
-    if (!checkValue(javaDesc.javaVersionMajor, version[0], false) ||
-            !checkValue(javaDesc.javaVersionMinor, version[1], false) ||
-            !checkValue(javaDesc.jvmVendor, java.lang.System.getProperty("java.vendor.url"), false) ||
-            !checkProperty(shell, javaDesc.jdkInstalled, false)) {
-        printTestResult("installed JVM is supported.","[RED]");
-        print("----------------------------------");
-        print(javaDesc.javaVersionMajor.description);
+    print(lineSeparator);
+    var version = java.lang.System.getProperty("java.version").split("_");
+    if (!checkValue(javaDesc.javaVersionMajor, version[0], false)) {
+        printTestResult(
+            "The expected Java major version is [" +
+            javaDesc.javaVersionMajor.expected +
+            "] and installed is [" +
+            version[0] +
+            "].",
+            "[RED]");
+        overallStatus = updateStatus(overallStatus, "[RED]");
+    }
+    else if (!checkValue(javaDesc.javaVersionMinor, version[1], false)) {
+        printTestResult(
+            "The expected Java minor version should be at least [" +
+            javaDesc.javaVersionMinor.expected +
+            "] and installed is [" +
+            version[1] +
+            "].",
+            "[RED]");
+        overallStatus = updateStatus(overallStatus, "[RED]");
+    }
+    else if (!checkValue(javaDesc.jvmVendor, java.lang.System.getProperty("java.vendor.url"), false)) {
+        printTestResult(
+            "Diffusion is certified on [Oracle JVM] and installed is [" +
+            java.lang.System.getProperty("java.vendor.url") +
+            "].",
+            "[RED]");
+        overallStatus = updateStatus(overallStatus, "[RED]");
+    }
+    else if (!checkProperty(shell, javaDesc.jdkInstalled, false)) {
+        printTestResult(
+            "Diffusion works with Java JDK which is not installed.",
+            "[RED]");
+        overallStatus = updateStatus(overallStatus, "[RED]");
     }
     else {
         printTestResult("installed JVM is supported.", "[GREEN]");
-        print("----------------------------------");
+        print(lineSeparator);
+        return;
     }
+    print(lineSeparator);
+    print(javaDesc.javaVersionMajor.description);
 }
 
 function writeFile(theData) {
@@ -247,7 +312,6 @@ function doPropertiesChecks(shell, checks) {
 function getCheckResult(shell, shellCommand) {
     var command = shell + "\"" + shellCommand + "\"";
     var result = `${command}`.trim();
-    // print ("result: " + result);
     return result;
 }
 
@@ -283,11 +347,11 @@ function checkValue(check, result, isResultPrintable) {
 }
 
 function evaluate(result, check) {
-    if (check.operant == "contains") {
+    if (check.operator == "contains") {
         return eval("\"" + result + "\".contains(\"" + check.expected + "\") ? true : false;");
     }
     else {
-        return eval(result + check.operant + check.expected + " ? true : false;");
+        return eval(result + check.operator + check.expected + " ? true : false;");
     }
 }
 
